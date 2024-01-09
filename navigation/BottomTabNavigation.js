@@ -8,16 +8,18 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import CartScreen from '../screens/ShopScreens/CartScreen';
 import {Color} from '../GlobalStyles';
 import {TouchableRipple} from 'react-native-paper';
+import {HomeStack} from './RootStackScreen';
 const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
-    <Tab.Navigator screenOptions={{
-      headerShown:false
-    }}>
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}>
       <Tab.Screen
-        name="Home"
-        component={HomeScreen}
+        name="HomeStack"
+        component={HomeStack}
         options={{
           tabBarIcon: ({focused}) => (
             <View>

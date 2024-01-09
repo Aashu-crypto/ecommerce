@@ -6,82 +6,110 @@ import {
   useWindowDimensions,
   ImageBackground,
   StatusBar,
+  ScrollView,
 } from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Card from '../../components/Card';
 import {FlashList} from '@shopify/flash-list';
 const HomeScreen = () => {
   const data = [
     {
-      Picture: 'Image_1',
-      Brand: 'BlcfcpbnLG',
-      Title: 'jzVWXnTYeyCsGbX',
-      Price: 186.54,
+      brandname: 'TechGear',
+      gadgettype: 'Smartphone',
+      rate: 215.65,
+      discountedrate: 135.86,
+      starrating: 1.7,
+      imageurl: 'https://picsum.photos/190/180',
     },
     {
-      Picture: 'Image_2',
-      Brand: 'hgCDecqlFJ',
-      Title: 'vaqiTLSjkgEGXfm',
-      Price: 143.63,
+      brandname: 'GizmoPro',
+      gadgettype: 'Tablet',
+      rate: 344.93,
+      discountedrate: 251.8,
+      starrating: 3.3,
+      imageurl: 'https://picsum.photos/190/180',
     },
     {
-      Picture: 'Image_3',
-      Brand: 'qCgFUJBBMd',
-      Title: 'xXWaCxpYYnqUTXs',
-      Price: 415.49,
+      brandname: 'Electra',
+      gadgettype: 'Laptop',
+      rate: 140.98,
+      discountedrate: 101.51,
+      starrating: 1.5,
+      imageurl: 'https://picsum.photos/190/180',
     },
     {
-      Picture: 'Image_4',
-      Brand: 'zoEzUwXkoR',
-      Title: 'jQDDLFbtjelGGmX',
-      Price: 214.94,
+      brandname: 'PixelPlus',
+      gadgettype: 'Smartwatch',
+      rate: 338.96,
+      discountedrate: 237.27,
+      starrating: 3.8,
+      imageurl: 'https://picsum.photos/190/180',
     },
     {
-      Picture: 'Image_5',
-      Brand: 'HAUxsmEpyt',
-      Title: 'QJmnzeboaXudmzB',
-      Price: 13.36,
+      brandname: 'Innovatech',
+      gadgettype: 'Tablet',
+      rate: 11.01,
+      discountedrate: 9.8,
+      starrating: 4.3,
+      imageurl: 'https://picsum.photos/190/180',
     },
     {
-      Picture: 'Image_6',
-      Brand: 'EadjChsDjI',
-      Title: 'OETBcJDNOOwAhAp',
-      Price: 402.55,
+      brandname: 'SoundWave',
+      gadgettype: 'Headphones',
+      rate: 196.57,
+      discountedrate: 121.87,
+      starrating: 2.3,
+      imageurl: 'https://picsum.photos/190/180',
     },
     {
-      Picture: 'Image_7',
-      Brand: 'bmlHWGsgmP',
-      Title: 'DJFXZFcZNIFAxFZ',
-      Price: 29.83,
+      brandname: 'Visionary',
+      gadgettype: 'Laptop',
+      rate: 239.21,
+      discountedrate: 160.27,
+      starrating: 4.4,
+      imageurl: 'https://picsum.photos/190/180',
     },
     {
-      Picture: 'Image_8',
-      Brand: 'EdgCiaegCc',
-      Title: 'DrdYEGwrVLpFvCV',
-      Price: 441.39,
+      brandname: 'SmartTech',
+      gadgettype: 'Camera',
+      rate: 405.13,
+      discountedrate: 328.16,
+      starrating: 4.7,
+      imageurl: 'https://picsum.photos/190/180',
     },
     {
-      Picture: 'Image_9',
-      Brand: 'JbFWAFXmcr',
-      Title: 'ycwiDqWZcKHIhcE',
-      Price: 472.95,
+      brandname: 'GadgetGenius',
+      gadgettype: 'Laptop',
+      rate: 129.37,
+      discountedrate: 107.38,
+      starrating: 2.3,
+      imageurl: 'https://picsum.photos/190/180',
     },
     {
-      Picture: 'Image_10',
-      Brand: 'CVhvModoJD',
-      Title: 'YcRFfnBaBFhzrIJ',
-      Price: 475.05,
+      brandname: 'FutureTech',
+      gadgettype: 'Laptop',
+      rate: 121.01,
+      discountedrate: 106.49,
+      starrating: 4.5,
+      imageurl: 'https://picsum.photos/190/180',
     },
   ];
-  const renderItem = ({item})=>(
+
+  const renderItem = ({item}) => (
     <View>
-      <Text>
-        {item.Brand}
-      </Text>
+      <Card
+        brandname={item.brandname}
+        gadgettype={item.gadgettype}
+        rate={item.rate}
+        discountedrate={item.discountedrate}
+        starrating={item.starrating}
+        imageurl={item.imageurl}
+      />
     </View>
-  )
+  );
   return (
-    <View style={{flex:1}}>
+    <ScrollView style={styles.container}>
       <StatusBar translucent={true} backgroundColor="rgba(0, 0, 0, 0.5)" />
       <ImageBackground
         source={require('../../assets/img/MainScreenImage.jpg')}
@@ -93,19 +121,19 @@ const HomeScreen = () => {
         <View style={{position: 'absolute', bottom: 15, left: 10}}>
           <Text
             style={{
-              fontSize: 40,
-              color: '#000',
+              fontSize: 48,
+              color: '#fff',
               fontFamily: 'Poppins-Bold',
-              fontWeight: '600',
+              fontWeight: '900',
             }}>
             Digital
           </Text>
           <Text
             style={{
-              fontSize: 40,
-              color: '#000',
+              fontSize: 48,
+              color: '#fff',
               fontFamily: 'Poppins-Bold',
-              fontWeight: '600',
+              fontWeight: '900',
             }}>
             Sale
           </Text>
@@ -125,11 +153,22 @@ const HomeScreen = () => {
         </View>
         <Text style={{paddingLeft: 10}}>Never Seen Before!</Text>
       </View>
-      <FlashList data={data} renderItem={renderItem} estimatedItemSize={100} />
-    </View>
+      <FlashList
+        data={data}
+        renderItem={renderItem}
+        estimatedItemSize={100}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+      />
+    </ScrollView>
   );
 };
 
 export default HomeScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+});
