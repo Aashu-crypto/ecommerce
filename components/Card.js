@@ -10,6 +10,7 @@ const Card = ({
   discountedrate,
   starrating,
   imageurl,
+  description
 }) => {
   const navigation = useNavigation();
   return (
@@ -24,6 +25,7 @@ const Card = ({
           discountedrate: discountedrate,
           starrating: starrating,
           imageurl: imageurl,
+          description:description
         });
       }}>
       <Image source={{uri: imageurl}} style={styles.image} />
@@ -41,8 +43,8 @@ const Card = ({
       <Text style={styles.brandname}>{brandname}</Text>
       <Text style={styles.gadgettype}>{gadgettype}</Text>
       <View style={{flexDirection: 'row'}}>
-        <Text style={styles.rate}>₹{rate}</Text>
-        <Text style={styles.discountedrate}>₹{discountedrate}</Text>
+        <Text style={styles.rate}>{rate}</Text>
+        <Text style={styles.discountedrate}>{discountedrate}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -71,7 +73,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: '400',
     fontFamily: FontFamily.poppinsRegular,
-    color: '#9B9B9B',
+    color: Color.gray,
   },
   gadgettype: {
     fontSize: 16,
@@ -85,7 +87,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     fontWeight: '500',
     fontFamily: FontFamily.poppinsRegular,
-    color: '#9B9B9B',
+    color: Color.gray,
   },
   discountedrate: {
     fontSize: 14,

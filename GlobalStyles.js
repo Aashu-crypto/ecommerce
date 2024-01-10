@@ -4,6 +4,8 @@ import {Dimensions} from 'react-native';
 export const Color = {
   appDefaultColor: '#DB3022',
   starColor: '#FFBA49',
+  gray :'#9B9B9B',
+  black:'#222222'
 };
 
 /* fonts */
