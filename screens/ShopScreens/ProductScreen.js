@@ -8,10 +8,13 @@ import {
   View,
 } from 'react-native';
 import React, {useState, useRef} from 'react';
+import {useDispatch} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
 import {FontFamily, Color} from '../../GlobalStyles';
 import StarRating from 'react-native-star-rating';
+import {screen} from '../../redux/slice/ScreenNameSlice';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import { useNavigation } from '@react-navigation/native';
 const ProductScreen = ({route}) => {
   const {
     brandname,
@@ -21,109 +24,142 @@ const ProductScreen = ({route}) => {
     starrating,
     imageurl,
     description,
+   
   } = route.params;
   const image = 'https://picsum.photos/275/413';
   const [isClicked, setIsClicked] = useState(false);
   const refRBSheet = useRef();
   const [selectedSize, setSelectedSize] = useState('M');
   const [btnClicked, setBtnClicked] = useState(0);
+  const dispatch = useDispatch();
+  const navigation = useNavigation()
 
   const [selectedColor, setSelectedColor] = useState('black');
   const size = ['XS', 'S', 'M', 'L', 'XL'];
   const color = ['black', 'blue', 'red'];
   return (
-    <ScrollView style={styles.container}>
-      <View>
-        <ScrollView horizontal>
-          <Image source={{uri:  imageurl}} style={styles.image} />
-          <Image source={{uri:  imageurl}} style={styles.image} />
-          <Image source={{uri: image}} style={styles.image} />
-        </ScrollView>
-      </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-evenly',
-          marginVertical: 12,
-        }}>
-        <Pressable
-          style={styles.selectBtn}
-          onPress={() => {
-            setBtnClicked(1), refRBSheet.current.open();
-          }}>
-          <Text style={styles.selectBtnText}>Size : {selectedSize}</Text>
-          <Icon name="arrow-down" size={15} style={styles.selectBtnText} />
-        </Pressable>
-
-        <Pressable
-          style={styles.selectBtn}
-          onPress={() => {
-            setBtnClicked(2), refRBSheet.current.open();
-          }}>
-          <Text style={styles.selectBtnText}>Color : {selectedColor}</Text>
-          <Icon name="arrow-down" size={15} style={styles.selectBtnText} />
-        </Pressable>
-        <Pressable style={styles.selectBtnFav}>
-          <Icon name="heart" size={15} style={styles.selectBtnText} />
-        </Pressable>
-      </View>
-      <View style={{padding: 5}}>
+    <>
+      <ScrollView style={styles.container}>
+        <View>
+          <ScrollView horizontal>
+            <Image source={{uri: imageurl}} style={styles.image} />
+            <Image source={{uri: imageurl}} style={styles.image} />
+            <Image source={{uri: image}} style={styles.image} />
+          </ScrollView>
+        </View>
         <View
           style={{
-            justifyContent: 'space-between',
             flexDirection: 'row',
+            justifyContent: 'space-evenly',
+            marginVertical: 12,
           }}>
-          <Text style={styles.brandname}>{brandname}</Text>
-          <Text style={styles.brandname}>{discountedrate}</Text>
-        </View>
-        <Text style={styles.gadgettype}>{gadgettype}</Text>
+          <Pressable
+            style={styles.selectBtn}
+            onPress={() => {
+              setBtnClicked(1), refRBSheet.current.open();
+            }}>
+            <Text style={styles.selectBtnText}>Size : {selectedSize}</Text>
+            <Icon name="arrow-down" size={15} style={styles.selectBtnText} />
+          </Pressable>
 
-        <View style={{width: 50, marginVertical: 5}}>
-          <StarRating
-            starSize={15}
-            disabled={false}
-            maxStars={5}
-            rating={starrating}
-            emptyStarColor={'#FFBA49'}
-            fullStarColor={'#FFBA49'}
-          />
+          <Pressable
+            style={styles.selectBtn}
+            onPress={() => {
+              setBtnClicked(2), refRBSheet.current.open();
+            }}>
+            <Text style={styles.selectBtnText}>Color : {selectedColor}</Text>
+            <Icon name="arrow-down" size={15} style={styles.selectBtnText} />
+          </Pressable>
+          <Pressable style={styles.selectBtnFav}>
+            <Icon name="heart" size={15} style={styles.selectBtnText} />
+          </Pressable>
         </View>
-        <Text style={styles.description}>{description}</Text>
-      </View>
-      <RBSheet
-        ref={refRBSheet}
-        closeOnDragDown={true}
-        closeOnPressMask={false}
-        animationType="fade"
-        customStyles={{
-          wrapper: {
-            backgroundColor: 'transparent',
-          },
-          draggableIcon: {
-            backgroundColor: '#000',
-          },
+        <View style={{padding: 5}}>
+          <View
+            style={{
+              justifyContent: 'space-between',
+              flexDirection: 'row',
+            }}>
+            <Text style={styles.brandname}>{brandname}</Text>
+            <Text style={styles.brandname}>{discountedrate}</Text>
+          </View>
+          <Text style={styles.gadgettype}>{gadgettype}</Text>
+
+          <View style={{width: 50, marginVertical: 5}}>
+            <StarRating
+              starSize={15}
+              disabled={false}
+              maxStars={5}
+              rating={starrating}
+              emptyStarColor={'#FFBA49'}
+              fullStarColor={'#FFBA49'}
+            />
+          </View>
+          <Text style={styles.description}>{description}</Text>
+        </View>
+
+        <RBSheet
+          ref={refRBSheet}
+          closeOnDragDown={true}
+          closeOnPressMask={false}
+          animationType="fade"
+          customStyles={{
+            wrapper: {
+              backgroundColor: 'transparent',
+            },
+            draggableIcon: {
+              backgroundColor: '#000',
+            },
+          }}>
+          <Text style={styles.bottomSheetTitle}>
+            {btnClicked == 1 ? 'Select Size' : 'Select Color'}
+          </Text>
+          <View style={styles.bottomSheet}>
+            {(btnClicked == 1 ? size : color).map(item => (
+              <TouchableOpacity
+                style={styles.bottomSheetBtn}
+                onPress={() => {
+                  {
+                    btnClicked == 1
+                      ? setSelectedSize(item)
+                      : setSelectedColor(item);
+                  }
+                  refRBSheet.current.close();
+                }}>
+                <Text style={styles.bottomSheetBtnText}>{item}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </RBSheet>
+      </ScrollView>
+      <TouchableOpacity
+        style={{
+          backgroundColor: Color.appDefaultColor,
+          height: 48,
+          width: 343,
+          alignItems: 'center',
+          alignSelf: 'center',
+          justifyContent: 'center',
+          borderRadius: 25,
+          margin: 5,
+          position: 'absolute',
+          bottom: 0,
+        }}
+        onPress={() => {
+         navigation.navigate('Cart')
         }}>
-        <Text style={styles.bottomSheetTitle}>
-          {btnClicked == 1 ? 'Select Size' : 'Select Color'}
+        <Text
+          style={{
+            fontSize: 14,
+            lineHeight: 20,
+            color: '#fff',
+            fontWeight: '500',
+            fontFamily: FontFamily.poppinsRegular,
+          }}>
+          Add to Cart
         </Text>
-        <View style={styles.bottomSheet}>
-          {(btnClicked == 1 ? size : color).map(item => (
-            <TouchableOpacity
-              style={styles.bottomSheetBtn}
-              onPress={() => {
-                {
-                  btnClicked == 1
-                    ? setSelectedSize(item)
-                    : setSelectedColor(item);
-                }
-                refRBSheet.current.close();
-              }}>
-              <Text style={styles.bottomSheetBtnText}>{item}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </RBSheet>
-    </ScrollView>
+      </TouchableOpacity>
+    </>
   );
 };
 

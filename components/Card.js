@@ -10,7 +10,7 @@ const Card = ({
   discountedrate,
   starrating,
   imageurl,
-  description
+  description,index
 }) => {
   const navigation = useNavigation();
   return (
@@ -40,7 +40,8 @@ const Card = ({
         />
       </View>
 
-      <Text style={styles.brandname}>{brandname}</Text>
+      <Text style={styles.brandname}>{index} {brandname}</Text>
+      
       <Text style={styles.gadgettype}>{gadgettype}</Text>
       <View style={{flexDirection: 'row'}}>
         <Text style={styles.rate}>{rate}</Text>

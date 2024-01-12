@@ -8,10 +8,11 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import CartScreen from '../screens/ShopScreens/CartScreen';
 import {Color} from '../GlobalStyles';
 import {TouchableRipple} from 'react-native-paper';
+import { CartStack } from './RootStackScreen';
 import {HomeStack} from './RootStackScreen';
 const Tab = createBottomTabNavigator();
 
-export default function App() {
+export default function BottomTabNavigation() {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -37,7 +38,7 @@ export default function App() {
       />
       <Tab.Screen
         name="Cart"
-        component={CartScreen}
+        component={CartStack}
         options={{
           tabBarIcon: ({focused}) => (
             <View>
