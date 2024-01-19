@@ -25,7 +25,7 @@ const Card = ({
           discountedrate: discountedrate,
           starrating: starrating,
           imageurl: imageurl,
-          description:description
+          description:description,index:index
         });
       }}>
       <Image source={{uri: imageurl}} style={styles.image} />

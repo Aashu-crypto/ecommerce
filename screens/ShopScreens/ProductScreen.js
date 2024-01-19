@@ -14,7 +14,8 @@ import {FontFamily, Color} from '../../GlobalStyles';
 import StarRating from 'react-native-star-rating';
 import {screen} from '../../redux/slice/ScreenNameSlice';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
+import {updateCart} from '../../redux/slice/CartSlice';
 const ProductScreen = ({route}) => {
   const {
     brandname,
@@ -24,7 +25,7 @@ const ProductScreen = ({route}) => {
     starrating,
     imageurl,
     description,
-   
+    index,
   } = route.params;
   const image = 'https://picsum.photos/275/413';
   const [isClicked, setIsClicked] = useState(false);
@@ -32,7 +33,7 @@ const ProductScreen = ({route}) => {
   const [selectedSize, setSelectedSize] = useState('M');
   const [btnClicked, setBtnClicked] = useState(0);
   const dispatch = useDispatch();
-  const navigation = useNavigation()
+  const navigation = useNavigation();
 
   const [selectedColor, setSelectedColor] = useState('black');
   const size = ['XS', 'S', 'M', 'L', 'XL'];
@@ -146,7 +147,20 @@ const ProductScreen = ({route}) => {
           bottom: 0,
         }}
         onPress={() => {
-         navigation.navigate('Cart')
+          dispatch(
+            updateCart({
+              brandname: brandname,
+              gadgettype: gadgettype,
+              rate: rate,
+              discountedrate: discountedrate,
+              starrating: starrating,
+              imageurl: imageurl,
+              description: description,
+              index: index,
+              selectedColor:selectedColor,
+              selectedSize:selectedSize
+            }),
+          );
         }}>
         <Text
           style={{

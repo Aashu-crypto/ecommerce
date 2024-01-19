@@ -10,13 +10,16 @@ import {Color} from '../GlobalStyles';
 import {TouchableRipple} from 'react-native-paper';
 import { CartStack } from './RootStackScreen';
 import {HomeStack} from './RootStackScreen';
+import { ProfileStack } from './RootStackScreen';
 const Tab = createBottomTabNavigator();
 
 export default function BottomTabNavigation() {
   return (
     <Tab.Navigator
+    initialRouteName='HomeStack'
       screenOptions={{
         headerShown: false,
+
       }}>
       <Tab.Screen
         name="HomeStack"
@@ -37,7 +40,7 @@ export default function BottomTabNavigation() {
         }}
       />
       <Tab.Screen
-        name="Cart"
+        name="CartStack"
         component={CartStack}
         options={{
           tabBarIcon: ({focused}) => (
@@ -54,8 +57,8 @@ export default function BottomTabNavigation() {
         }}
       />
       <Tab.Screen
-        name="Profile"
-        component={ProfileScreen}
+        name="ProfileStack"
+        component={ProfileStack}
         options={{
           tabBarIcon: ({focused}) => (
             <View>
