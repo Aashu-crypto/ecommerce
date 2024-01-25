@@ -22,6 +22,8 @@ const HomeScreen = () => {
   const itemRefs = useRef([]);
   const data = [
     {
+      orderNumber: 'ORD123456',
+      trackingNumber: 'TRK789012',
       brandname: 'TechGear',
       gadgettype: 'Smartphone',
       rate: '₹215.65',
@@ -33,6 +35,8 @@ const HomeScreen = () => {
       status: 1,
     },
     {
+      orderNumber: 'ORD234567',
+      trackingNumber: 'TRK890123',
       brandname: 'GizmoPro',
       gadgettype: 'Tablet',
       rate: '₹344.93',
@@ -44,6 +48,8 @@ const HomeScreen = () => {
       status: 2,
     },
     {
+      orderNumber: 'ORD345678',
+      trackingNumber: 'TRK901234',
       brandname: 'Electra',
       gadgettype: 'Laptop',
       rate: '₹140.98',
@@ -55,6 +61,8 @@ const HomeScreen = () => {
       status: 3,
     },
     {
+      orderNumber: 'ORD456789',
+      trackingNumber: 'TRK012345',
       brandname: 'PixelPlus',
       gadgettype: 'Smartwatch',
       rate: '₹338.96',
@@ -66,6 +74,8 @@ const HomeScreen = () => {
       status: 1,
     },
     {
+      orderNumber: 'ORD567890',
+      trackingNumber: 'TRK123456',
       brandname: 'Innovatech',
       gadgettype: 'Tablet',
       rate: '₹11.01',
@@ -77,6 +87,8 @@ const HomeScreen = () => {
       status: 2,
     },
     {
+      orderNumber: 'ORD678901',
+      trackingNumber: 'TRK234567',
       brandname: 'SoundWave',
       gadgettype: 'Headphones',
       rate: '₹196.57',
@@ -88,6 +100,8 @@ const HomeScreen = () => {
       status: 3,
     },
     {
+      orderNumber: 'ORD789012',
+      trackingNumber: 'TRK345678',
       brandname: 'Visionary',
       gadgettype: 'Laptop',
       rate: '₹239.21',
@@ -99,6 +113,8 @@ const HomeScreen = () => {
       status: 1,
     },
     {
+      orderNumber: 'ORD890123',
+      trackingNumber: 'TRK456789',
       brandname: 'SmartTech',
       gadgettype: 'Camera',
       rate: '₹405.13',
@@ -109,6 +125,7 @@ const HomeScreen = () => {
         'Capture moments in stunning detail with the SmartTech Camera. It features advanced optics and user-friendly controls, ideal for both amateur and professional photographers. With its high-resolution image capture and versatile shooting modes, this camera is perfect for capturing everything from everyday moments to special events.',
       status: 2,
     },
+    // Add orderNumber and trackingNumber for the remaining objects as needed
   ];
 
   const initializeRefs = () => {
@@ -116,6 +133,7 @@ const HomeScreen = () => {
   };
   useEffect(() => {
     dispatch(product(data));
+    console.log("Product data added to  redux baby");
   });
 
   const renderItem = ({item, index}) => (

@@ -13,7 +13,7 @@ const App = () => {
       <PersistGate loading={null} persistor={persistor}>
         <NavigationContainer>
           <PaperProvider>
-            <BottomTabNavigation />
+            <Navigator/>
           </PaperProvider>
         </NavigationContainer>
       </PersistGate>

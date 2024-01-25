@@ -8,18 +8,17 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import CartScreen from '../screens/ShopScreens/CartScreen';
 import {Color} from '../GlobalStyles';
 import {TouchableRipple} from 'react-native-paper';
-import { CartStack } from './RootStackScreen';
+import {CartStack} from './RootStackScreen';
 import {HomeStack} from './RootStackScreen';
-import { ProfileStack } from './RootStackScreen';
+import {ProfileStack} from './RootStackScreen';
 const Tab = createBottomTabNavigator();
 
 export default function BottomTabNavigation() {
   return (
     <Tab.Navigator
-    initialRouteName='HomeStack'
+      initialRouteName="HomeStack"
       screenOptions={{
         headerShown: false,
-
       }}>
       <Tab.Screen
         name="HomeStack"

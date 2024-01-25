@@ -6,7 +6,9 @@ import CartScreen from '../screens/ShopScreens/CartScreen';
 import BottomTabNavigation from './BottomTabNavigation';
 import ProfileScreen from '../screens/ProfileScreens/ProfileScreen';
 import MyOrders from '../screens/ProfileScreens/MyOrders';
-import { Color } from '../GlobalStyles';
+import {Color} from '../GlobalStyles';
+import SignUp from '../screens/ProfileScreens/SignUp';
+import SignIn from '../screens/ProfileScreens/SignIn';
 const Stack = createStackNavigator();
 
 const HomeStack = () => {
@@ -39,17 +41,17 @@ const CartStack = () => {
 };
 const ProfileStack = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="Profile">
       <Stack.Screen
         name="Profile"
         component={ProfileScreen}
         options={{
           screenOptions: false,
-          title: 'My Profile',
+          title: '',
           headerTitleStyle: {
             fontSize: 35,
-            fontVariant:'700',
-            color:Color.black
+            fontVariant: '700',
+            color: Color.black,
           },
         }}
       />
@@ -58,7 +60,29 @@ const ProfileStack = () => {
         component={MyOrders}
         options={{
           screenOptions: true,
-          title:""
+          title: '',
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+const UserProfileStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="SignUp"
+        component={SignUp}
+        options={{
+          screenOptions: true,
+          title: '',
+        }}
+      />
+      <Stack.Screen
+        name="SignIn"
+        component={SignIn}
+        options={{
+          screenOptions: true,
+          title: '',
         }}
       />
     </Stack.Navigator>
@@ -70,10 +94,10 @@ const Navigator = () => {
   switch (navigation) {
     case 'MAIN':
       return <BottomTabNavigation />;
-    case 'CART':
-      return <CartStack />;
+    case 'USER':
+      return <UserProfileStack />;
     default:
       return <BottomTabNavigation />;
   }
 };
-export {HomeStack, Navigator, CartStack, ProfileStack};
+export {HomeStack, Navigator, CartStack, ProfileStack,UserProfileStack};
