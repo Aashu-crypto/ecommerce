@@ -80,7 +80,7 @@ const MyOrders = () => {
                 trackingNumber={item.trackingNumber}
                 rate={item.discountedrate}
                 status={item.status}
-                index={indexTab }
+                index={indexTab}
               />
             </View>
           ))}

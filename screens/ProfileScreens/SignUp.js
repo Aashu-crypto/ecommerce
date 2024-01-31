@@ -5,11 +5,46 @@ import SignInput from '../../components/SignInput';
 import {setUser} from '../../redux/slice/UserSlice';
 import auth from '@react-native-firebase/auth';
 import {useDispatch} from 'react-redux';
+import {
+  GoogleOneTapSignIn,
+  statusCodes,
+  GoogleSigninButton,
+} from '@react-native-google-signin/google-signin';
 import {screen} from '../../redux/slice/ScreenNameSlice';
 const SignUp = ({navigation}) => {
   const [mail, setMail] = useState();
   const [password, setPassword] = useState();
   const dispatch = useDispatch();
+
+  const [state, setState] = useState();
+
+  const signIn = async () => {
+    try {
+      const userInfo = await GoogleOneTapSignIn.signIn();
+      setState({userInfo});
+    } catch (error) {
+      if (error) {
+        switch (error.code) {
+          case statusCodes.NO_SAVED_CREDENTIAL_FOUND:
+            await GoogleOneTapSignIn.createAccount({
+              webClientId: config.webClientId,
+              nonce: 'your_nonce',
+            });
+            break;
+          case statusCodes.SIGN_IN_CANCELLED:
+            // sign in was cancelled
+            break;
+          case statusCodes.ONE_TAP_START_FAILED:
+            // Android and Web only, you probably have hit rate limiting. You can still call the original Google Sign In API in this case.
+            break;
+          default:
+            console.log('Default');
+        }
+      } else {
+        // an error that's not related to google sign in occurred
+      }
+    }
+  };
 
   const handleSignIn = () => {
     auth()
@@ -46,7 +81,6 @@ const SignUp = ({navigation}) => {
             }}
           />
         </View>
-
         <Text
           onPress={() => {
             dispatch(screen('MAIN'));
@@ -66,12 +100,14 @@ const SignUp = ({navigation}) => {
           />
         </View>
         <Pressable>
-          <Text>{mail}</Text>
-          <Text style={{textAlign: 'right', marginRight: 15}}>
+          <Text
+            style={{textAlign: 'right', marginRight: 15}}
+            onPress={() => {
+              navigation.navigate('SignIn');
+            }}>
             Already Have a account -----
           </Text>
         </Pressable>
-
         <Pressable
           style={{
             backgroundColor: Color.appDefaultColor,
@@ -98,6 +134,15 @@ const SignUp = ({navigation}) => {
             Sign Up
           </Text>
         </Pressable>
+
+        <GoogleSigninButton
+          size={GoogleSigninButton.Size.Wide}
+          color={GoogleSigninButton.Color.Dark}
+          style={{alignSelf: 'center', marginTop: 15}}
+          onPress={() => {
+            signIn();
+          }}
+        />
       </View>
     </View>
   );

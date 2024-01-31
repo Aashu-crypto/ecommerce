@@ -3,15 +3,20 @@ import React from 'react';
 import {Color, FontFamily} from '../../GlobalStyles';
 import {useDispatch} from 'react-redux';
 import SignInput from '../../components/SignInput';
+import { useNavigation } from '@react-navigation/native';
 const SignIn = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigation()
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Sign In</Text>
       <View style={{flex: 1, justifyContent: 'center', alignItem: 'center'}}>
         <SignInput placeholder={'Email'} />
         <SignInput placeholder={'Password'} secureTextEntry={'true'} />
-        <Pressable>
+        <Pressable style={{flexDirection: 'row',justifyContent:'space-between'}}>
+          <Text style={{textAlign: 'left', marginLeft: 15}} onPress={()=>navigation.goBack()}>
+            Don't Have a account?
+          </Text>
           <Text style={{textAlign: 'right', marginRight: 15}}>
             Forget your Password -----?
           </Text>
