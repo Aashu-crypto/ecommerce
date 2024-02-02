@@ -1,5 +1,5 @@
 import {Pressable, StyleSheet, Text, View, TextInput} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Color, FontFamily} from '../../GlobalStyles';
 import SignInput from '../../components/SignInput';
 import {setUser} from '../../redux/slice/UserSlice';
@@ -9,6 +9,7 @@ import {
   GoogleOneTapSignIn,
   statusCodes,
   GoogleSigninButton,
+  GoogleSignin,
 } from '@react-native-google-signin/google-signin';
 import {screen} from '../../redux/slice/ScreenNameSlice';
 const SignUp = ({navigation}) => {
@@ -17,34 +18,30 @@ const SignUp = ({navigation}) => {
   const dispatch = useDispatch();
 
   const [state, setState] = useState();
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId:
+        '876889475765-a00b4jsbfdkqt31gdsvr5rq65lka9rkh.apps.googleusercontent.com',
+    });
+  }, []);
 
-  const signIn = async () => {
+  async function onGoogleButtonPress() {
     try {
-      const userInfo = await GoogleOneTapSignIn.signIn();
-      setState({userInfo});
+      // Check if your device supports Google Play
+      await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
+      // Get the users ID token
+      const {idToken, user} = await GoogleSignin.signIn();
+      console.log(user);
+      setState(user);
+      // Create a Google credential with the token
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+      // Sign-in the user with the credential
+      return auth().signInWithCredential(googleCredential);
     } catch (error) {
-      if (error) {
-        switch (error.code) {
-          case statusCodes.NO_SAVED_CREDENTIAL_FOUND:
-            await GoogleOneTapSignIn.createAccount({
-              webClientId: config.webClientId,
-              nonce: 'your_nonce',
-            });
-            break;
-          case statusCodes.SIGN_IN_CANCELLED:
-            // sign in was cancelled
-            break;
-          case statusCodes.ONE_TAP_START_FAILED:
-            // Android and Web only, you probably have hit rate limiting. You can still call the original Google Sign In API in this case.
-            break;
-          default:
-            console.log('Default');
-        }
-      } else {
-        // an error that's not related to google sign in occurred
-      }
+      console.log(error);
     }
-  };
+  }
 
   const handleSignIn = () => {
     auth()
@@ -140,7 +137,7 @@ const SignUp = ({navigation}) => {
           color={GoogleSigninButton.Color.Dark}
           style={{alignSelf: 'center', marginTop: 15}}
           onPress={() => {
-            signIn();
+            onGoogleButtonPress();
           }}
         />
       </View>

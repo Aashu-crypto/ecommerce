@@ -1,27 +1,66 @@
-import {Pressable, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {Pressable, StyleSheet, Text, View, TextInput} from 'react-native';
+import React, {useState} from 'react';
 import {Color, FontFamily} from '../../GlobalStyles';
 import {useDispatch} from 'react-redux';
 import SignInput from '../../components/SignInput';
-import { useNavigation } from '@react-navigation/native';
+import auth from '@react-native-firebase/auth';
+import {useNavigation} from '@react-navigation/native';
+import {screen} from '../../redux/slice/ScreenNameSlice';
 const SignIn = () => {
   const dispatch = useDispatch();
-  const navigation = useNavigation()
+  const [mail, setMail] = useState();
+  const [password, setPassword] = useState();
+  const loginUser = async (email, password) => {
+    try {
+      let response = await auth().signInWithEmailAndPassword(email, password);
+      if (response && response.user) {
+        console.log('Login Success', response.user);
+        dispatch(screen('MAIN'));
+        // Perform any operations after successful login here
+      }
+    } catch (e) {
+      console.error('Login Error', e.message);
+      // Handle errors here, like incorrect password or no user found
+    }
+  };
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Sign In</Text>
       <View style={{flex: 1, justifyContent: 'center', alignItem: 'center'}}>
-        <SignInput placeholder={'Email'} />
-        <SignInput placeholder={'Password'} secureTextEntry={'true'} />
-        <Pressable style={{flexDirection: 'row',justifyContent:'space-between'}}>
-          <Text style={{textAlign: 'left', marginLeft: 15}} onPress={()=>navigation.goBack()}>
-            Don't Have a account?
-          </Text>
-          <Text style={{textAlign: 'right', marginRight: 15}}>
-            Forget your Password -----?
+        <View style={styles.containerText}>
+          <TextInput
+            style={styles.textinput}
+            placeholder={'Email'}
+            keyboardType="email-address"
+            placeholderTextColor={Color.gray}
+            onChangeText={i => {
+              setMail(i);
+            }}
+          />
+        </View>
+
+        <View style={styles.containerText}>
+          <TextInput
+            style={styles.textinput}
+            placeholder={'Password'}
+            keyboardType="default"
+            placeholderTextColor={Color.gray}
+            secureTextEntry={true}
+            onChangeText={i => {
+              setPassword(i);
+            }}
+          />
+        </View>
+        <Pressable>
+          <Text
+            style={{textAlign: 'right', marginRight: 15}}
+            onPress={() => {
+              navigation.navigate('SignIn');
+            }}>
+            Forget Your Password?
           </Text>
         </Pressable>
-
         <Pressable
           style={{
             backgroundColor: Color.appDefaultColor,
@@ -35,7 +74,7 @@ const SignIn = () => {
             marginTop: 15,
           }}
           onPress={() => {
-            // navigation.navigate('SignIn');
+            loginUser(mail, password);
           }}>
           <Text
             style={{
@@ -45,7 +84,7 @@ const SignIn = () => {
               fontWeight: '500',
               fontFamily: FontFamily.poppinsRegular,
             }}>
-            Sign In
+            Login In
           </Text>
         </Pressable>
       </View>
@@ -64,5 +103,14 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontFamily: FontFamily.poppinsBold,
     color: Color.black,
+  },
+  textinput: {
+    elevation: 2,
+    padding: 15,
+    height: 64,
+  },
+  containerText: {
+    margin: 5,
+    padding: 5,
   },
 });
