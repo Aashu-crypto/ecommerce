@@ -26,10 +26,12 @@ const ProfileScreen = ({navigation}) => {
       }),
     );
   };
+
+ 
   return (
     <SafeAreaView style={styles.container}>
       <View style={{marginHorizontal: 10}}>
-        <View style={{flexDirection: 'row', marginTop: 14}}>
+        {/* <View style={{flexDirection: 'row', marginTop: 14}}>
           <UserAvatar size={80} name="Aashutosh Gandotra" />
           <View
             style={{
@@ -40,7 +42,7 @@ const ProfileScreen = ({navigation}) => {
             <Text style={styles.name}>Aashutosh Gandotra</Text>
             <Text style={styles.email}>aashugandotra@gmail.com</Text>
           </View>
-        </View>
+        </View> */}
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('Order');

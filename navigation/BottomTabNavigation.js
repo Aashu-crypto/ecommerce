@@ -10,6 +10,7 @@ import {Color} from '../GlobalStyles';
 import {TouchableRipple} from 'react-native-paper';
 import {CartStack} from './RootStackScreen';
 import {HomeStack} from './RootStackScreen';
+import {Badge} from 'react-native-paper';
 import {ProfileStack} from './RootStackScreen';
 const Tab = createBottomTabNavigator();
 
@@ -43,12 +44,13 @@ export default function BottomTabNavigation() {
         component={CartStack}
         options={{
           tabBarIcon: ({focused}) => (
-            <View>
+            <View style={{flexDirection: 'row'}}>
               <Icon
                 name="shopping-cart"
                 color={focused && Color.appDefaultColor}
                 size={26}
               />
+              <Badge style= {{}}>6</Badge>
             </View>
           ),
           tabBarActiveTintColor: Color.appDefaultColor,

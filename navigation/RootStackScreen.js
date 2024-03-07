@@ -9,6 +9,8 @@ import MyOrders from '../screens/ProfileScreens/MyOrders';
 import {Color} from '../GlobalStyles';
 import SignUp from '../screens/ProfileScreens/SignUp';
 import SignIn from '../screens/ProfileScreens/SignIn';
+
+
 const Stack = createStackNavigator();
 
 const HomeStack = () => {

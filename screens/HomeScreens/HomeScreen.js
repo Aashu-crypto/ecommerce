@@ -14,7 +14,7 @@ import Card from '../../components/Card';
 import {FlashList} from '@shopify/flash-list';
 import {useDispatch, useSelector} from 'react-redux';
 import {product} from '../../redux/slice/ProductDataSlice';
-
+import { Badge } from 'react-native-paper';
 const HomeScreen = () => {
   const dispatch = useDispatch();
   const reduxData = useSelector(state => state.product.data);
@@ -151,6 +151,7 @@ const HomeScreen = () => {
     </View>
   );
   return (
+    <>
     <ScrollView style={styles.container}>
       <StatusBar translucent={true} backgroundColor="rgba(0, 0, 0, 0.5)" />
       <ImageBackground
@@ -204,7 +205,11 @@ const HomeScreen = () => {
         horizontal
         showsHorizontalScrollIndicator={false}
       />
+     
     </ScrollView>
+    
+     <Badge>3</Badge>
+     </>
   );
 };
 
