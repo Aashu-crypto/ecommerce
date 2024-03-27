@@ -2,7 +2,7 @@ import {Dimensions} from 'react-native';
 
 /* Colors */
 export const Color = {
-  appDefaultColor: '#DB3022',
+  appDefaultColor: '#6AD4DD',
   starColor: '#FFBA49',
   gray :'#9B9B9B',
   black:'#222222'

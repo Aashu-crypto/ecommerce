@@ -14,13 +14,20 @@ import Card from '../../components/Card';
 import {FlashList} from '@shopify/flash-list';
 import {useDispatch, useSelector} from 'react-redux';
 import {product} from '../../redux/slice/ProductDataSlice';
-import { Badge } from 'react-native-paper';
+import {Badge} from 'react-native-paper';
+import {backendHost} from '../../components/apiConfig';
+import useFetch from '../../customHooks/useFetch';
 const HomeScreen = () => {
   const dispatch = useDispatch();
   const reduxData = useSelector(state => state.product.data);
 
   const itemRefs = useRef([]);
-  const data = [
+  const {data, isLoading, error} = useFetch({url: '/products/details'});
+   useEffect(() => {
+    console.log('useFetch result:', data, isLoading, error); 
+  }, [data, isLoading, error]); 
+
+  const data1 = [
     {
       orderNumber: 'ORD123456',
       trackingNumber: 'TRK789012',
@@ -133,16 +140,16 @@ const HomeScreen = () => {
   };
   useEffect(() => {
     dispatch(product(data));
-    console.log("Product data added to  redux baby");
+    console.log('Product data added to  redux baby');
   });
 
   const renderItem = ({item, index}) => (
     <View>
       <Card
-        brandname={item.brandname}
-        gadgettype={item.gadgettype}
+        brandname={item.brandName}
+        gadgettype={item.name}
         rate={item.rate}
-        discountedrate={item.discountedrate}
+        discountedrate={item.price}
         starrating={item.starrating}
         imageurl={item.imageurl}
         description={item.description}
@@ -152,64 +159,63 @@ const HomeScreen = () => {
   );
   return (
     <>
-    <ScrollView style={styles.container}>
-      <StatusBar translucent={true} backgroundColor="rgba(0, 0, 0, 0.5)" />
-      <ImageBackground
-        source={require('../../assets/img/MainScreenImage.jpg')}
-        style={{
-          height: 300,
-          width: '100%',
-          resizeMode: 'stretch',
-        }}>
-        <View style={{position: 'absolute', bottom: 15, left: 10}}>
-          <Text
-            style={{
-              fontSize: 48,
-              color: '#fff',
-              fontFamily: 'Poppins-Bold',
-              fontWeight: '900',
-            }}>
-            Digital
-          </Text>
-          <Text
-            style={{
-              fontSize: 48,
-              color: '#fff',
-              fontFamily: 'Poppins-Bold',
-              fontWeight: '900',
-            }}>
-            Sale
-          </Text>
-        </View>
-      </ImageBackground>
-      <View>
-        <View
+      <ScrollView style={styles.container}>
+        <StatusBar translucent={true} backgroundColor="rgba(0, 0, 0, 0.5)" />
+        <ImageBackground
+          source={require('../../assets/img/MainScreenImage.jpg')}
           style={{
-            justifyContent: 'space-between',
-            flexDirection: 'row',
-            padding: 10,
+            height: 300,
+            width: '100%',
+            resizeMode: 'stretch',
           }}>
-          <Text style={{fontSize: 30, fontWeight: '700', color: '#000'}}>
-            New
-          </Text>
-          <Text style={{fontSize: 12, color: '#000'}}>View All</Text>
+          <View style={{position: 'absolute', bottom: 15, left: 10}}>
+            <Text
+              style={{
+                fontSize: 48,
+                color: '#fff',
+                fontFamily: 'Poppins-Bold',
+                fontWeight: '900',
+              }}>
+              Digital
+            </Text>
+            <Text
+              style={{
+                fontSize: 48,
+                color: '#fff',
+                fontFamily: 'Poppins-Bold',
+                fontWeight: '900',
+              }}>
+              Sale
+            </Text>
+          </View>
+        </ImageBackground>
+        <View>
+          <View
+            style={{
+              justifyContent: 'space-between',
+              flexDirection: 'row',
+              padding: 10,
+            }}>
+            <Text style={{fontSize: 30, fontWeight: '700', color: '#000'}}>
+              New
+            </Text>
+            <Text style={{fontSize: 12, color: '#000'}}>View All</Text>
+          </View>
+          <Text style={{paddingLeft: 10}}>Never Seen Before!</Text>
         </View>
-        <Text style={{paddingLeft: 10}}>Never Seen Before!</Text>
-      </View>
 
-      <FlashList
-        keyExtractor={(item, index) => index.toString()}
-        data={data}
-        renderItem={renderItem}
-        estimatedItemSize={100}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-      />
-     
-    </ScrollView>
-    
-     <Badge>3</Badge>
-     </>
+        <FlashList
+          keyExtractor={(item, index) => index.toString()}
+          data={data}
+          renderItem={renderItem}
+          estimatedItemSize={100}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+        />
+      </ScrollView>
+
+      <Badge>3</Badge>
+    </>
   );
 };
 
