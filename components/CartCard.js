@@ -1,7 +1,7 @@
 import {StyleSheet, Text, View, Image, Pressable} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {Color, FontFamily} from '../GlobalStyles';
+import {Color, FontFamily, height, width} from '../GlobalStyles';
 const CartCard = ({
   brandname,
   gadgettype,
@@ -15,14 +15,17 @@ const CartCard = ({
 }) => {
   const [quantity, setQuantity] = useState(1);
   const [price, setPrice] = useState(discountedrate);
-  const [totalCost, setTotalCost] = useState(price * quantity);
+  const [totalCost, setTotalCost] = useState(0);
+  useEffect(() => {
+    setTotalCost(price * quantity); 
+}, [price, quantity]);
   return (
     <View style={styles.card}>
       <View style={{flexDirection: 'row'}}>
         <Image
           source={{uri: imageurl}}
           style={{
-            height: 104,
+            height: height / 7,
             width: 105,
             overflow: 'hidden',
             borderBottomLeftRadius: 5,
@@ -40,7 +43,7 @@ const CartCard = ({
               <Icon name="dots-vertical" size={20} />
             </Pressable>
           </View>
-          <View style={{flexDirection: 'row'}}>
+          {/* <View style={{flexDirection: 'row'}}>
             <Text style={styles.sizeColorText}>
               {' '}
               Color: <Text style={{color: Color.black}}>{selectedColor}</Text>
@@ -48,8 +51,15 @@ const CartCard = ({
             <Text style={[styles.sizeColorText, {marginLeft: 10}]}>
               Size :<Text style={{color: Color.black}}>{selectedSize}</Text>
             </Text>
-          </View>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          </View> */}
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              position: 'absolute',
+              bottom: 0,
+              gap: 25,
+            }}>
             <View
               style={{
                 flexDirection: 'row',
@@ -72,10 +82,11 @@ const CartCard = ({
                 }}
               />
             </View>
-            <View>
-              <Text>{discountedrate}</Text>
+            <View style={{flexDirection: 'row'}}>
+              <Text>Rs {discountedrate}</Text>
               <Text style={{textAlign: 'right'}}>
-                *{quantity} ={totalCost}
+                {' '}
+                * {quantity} =Rs {totalCost}
               </Text>
             </View>
           </View>
@@ -89,8 +100,8 @@ export default CartCard;
 
 const styles = StyleSheet.create({
   card: {
-    width: 343,
-    height: 104,
+    width: width / 1.1,
+    height: height / 7,
     marginHorizontal: 16,
     marginVertical: 8,
     borderRadius: 10,

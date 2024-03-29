@@ -4,13 +4,15 @@ import StarRating from 'react-native-star-rating';
 import {Color, FontFamily} from '../GlobalStyles';
 import {useNavigation} from '@react-navigation/native';
 const Card = ({
+  productId,
   brandname,
   gadgettype,
   rate,
   discountedrate,
   starrating,
   imageurl,
-  description,index
+  description,
+  index,
 }) => {
   const navigation = useNavigation();
   return (
@@ -19,13 +21,15 @@ const Card = ({
       style={styles.container}
       onPress={() => {
         navigation.navigate('Product', {
+          productId: productId,
           brandname: brandname,
           gadgettype: gadgettype,
           rate: rate,
           discountedrate: discountedrate,
           starrating: starrating,
           imageurl: imageurl,
-          description:description,index:index
+          description: description,
+          index: index,
         });
       }}>
       <Image source={{uri: imageurl}} style={styles.image} />
@@ -40,8 +44,9 @@ const Card = ({
         />
       </View>
 
-      <Text style={styles.brandname}>{index} {brandname}</Text>
+      <Text style={styles.brandname}>{brandname}</Text>
       
+
       <Text style={styles.gadgettype}>{gadgettype}</Text>
       <View style={{flexDirection: 'row'}}>
         <Text style={styles.rate}>{rate}</Text>
@@ -65,7 +70,7 @@ const styles = StyleSheet.create({
   image: {
     width: 170,
     height: 180,
-    resizeMode: 'contain',
+    resizeMode: 'stretch',
     alignSelf: 'center',
     marginVertical: 5,
     borderRadius: 5,

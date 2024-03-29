@@ -110,7 +110,7 @@ import {
       },measures)
       console.log("m",measures);
       return (
-        <View style={{position: 'absolute', top: 100, width: width}}>
+        <View style={{ width: width}}>
           <View
             ref={containerRef}
             style={{

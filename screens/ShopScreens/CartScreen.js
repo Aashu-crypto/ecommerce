@@ -7,6 +7,7 @@ import {
   Image,
   Pressable,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -15,11 +16,13 @@ import {FlashList} from '@shopify/flash-list';
 import {Color, FontFamily} from '../../GlobalStyles';
 import CartCard from '../../components/CartCard';
 import RazorpayCheckout from 'react-native-razorpay';
+import {backendHost} from '../../components/apiConfig';
 
 const CartScreen = () => {
   const data = useSelector(state => state.cart.cart);
   const latestScreen = useSelector(state => state.screen.screen);
   console.log('data =>', data);
+  const user = useSelector(state => state.user.data);
   const [totalRate, setTotalRate] = useState(0);
   const KEY_ID = 'rzp_test_iJ36ueg9QGZdkY';
   const SECRET_KEY = 'iFp3t7GbBbyrxz660CjPvnxe';
@@ -32,7 +35,26 @@ const CartScreen = () => {
     );
     setTotalRate(newTotalRate);
   }, [data]);
+  const [cartItems, setCartItems] = useState();
+  useEffect(() => {
+    console.log('useEffeevt');
+    const fetchData = async () => {
+      console.log(user.userId);
+      try {
+        const response = await fetch(
+          `${backendHost}/products/cartItems/${user.userId}`,
+        );
 
+        const json = await response.json();
+        setCartItems(json[0].item);
+        console.log('json', json[0].item);
+      } catch (error) {
+        Alert.alert('Some error Occured');
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
   const handlePayment = () => {
     var options = {
       description: 'Full on Shopping',
@@ -60,17 +82,17 @@ const CartScreen = () => {
   };
 
   return (
-    <SafeAreaView style={{marginTop: 20, flex: 1}}>
+    <SafeAreaView style={{marginTop: 20, flex: 1, backgroundColor: '#fff'}}>
       <Text style={styles.cartTitle}>My Bag</Text>
-      {data.map(i => {
+      {cartItems?.map(i => {
         return (
           <CartCard
-            brandname={i.brandname}
+            brandname={i.name}
             gadgettype={i.gadgettype}
-            rate={i.rate}
-            discountedrate={i.discountedrate}
+            rate={i.price}
+            discountedrate={i.price}
             starrating={i.starrating}
-            imageurl={i.imageurl}
+            imageurl={i.imageUrl}
             description={i.description}
             selectedColor={i.selectedColor}
             selectedSize={i.selectedSize}

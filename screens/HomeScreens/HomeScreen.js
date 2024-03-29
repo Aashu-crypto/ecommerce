@@ -7,6 +7,7 @@ import {
   ImageBackground,
   StatusBar,
   ScrollView,
+  FlatList,
 } from 'react-native';
 import React, {useEffect, useState, useRef} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -23,9 +24,6 @@ const HomeScreen = () => {
 
   const itemRefs = useRef([]);
   const {data, isLoading, error} = useFetch({url: '/products/details'});
-   useEffect(() => {
-    console.log('useFetch result:', data, isLoading, error); 
-  }, [data, isLoading, error]); 
 
   const data1 = [
     {
@@ -135,28 +133,29 @@ const HomeScreen = () => {
     // Add orderNumber and trackingNumber for the remaining objects as needed
   ];
 
-  const initializeRefs = () => {
-    itemRefs.current = data.map(() => React.createRef());
-  };
   useEffect(() => {
     dispatch(product(data));
     console.log('Product data added to  redux baby');
   });
 
-  const renderItem = ({item, index}) => (
-    <View>
-      <Card
-        brandname={item.brandName}
-        gadgettype={item.name}
-        rate={item.rate}
-        discountedrate={item.price}
-        starrating={item.starrating}
-        imageurl={item.imageurl}
-        description={item.description}
-        index={index}
-      />
-    </View>
-  );
+  const renderItem = ({item, index}) => {
+
+    return (
+      <View>
+        <Card
+          productId={item._id}
+          brandname={item.brandName}
+          gadgettype={item.name}
+          rate={item.rate}
+          discountedrate={item.price}
+          starrating={item.starrating}
+          imageurl={item.imageUrl}
+          description={item.description}
+          index={index}
+        />
+      </View>
+    );
+  };
   return (
     <>
       <ScrollView style={styles.container}>
@@ -204,7 +203,7 @@ const HomeScreen = () => {
           <Text style={{paddingLeft: 10}}>Never Seen Before!</Text>
         </View>
 
-        <FlashList
+        <FlatList
           keyExtractor={(item, index) => index.toString()}
           data={data}
           renderItem={renderItem}
@@ -213,8 +212,6 @@ const HomeScreen = () => {
           showsHorizontalScrollIndicator={false}
         />
       </ScrollView>
-
-      <Badge>3</Badge>
     </>
   );
 };

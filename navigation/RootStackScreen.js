@@ -9,7 +9,7 @@ import MyOrders from '../screens/ProfileScreens/MyOrders';
 import {Color} from '../GlobalStyles';
 import SignUp from '../screens/ProfileScreens/SignUp';
 import SignIn from '../screens/ProfileScreens/SignIn';
-
+import Routes from '../Routes';
 
 const Stack = createStackNavigator();
 
@@ -49,7 +49,7 @@ const ProfileStack = () => {
         component={ProfileScreen}
         options={{
           screenOptions: false,
-          title: '',
+          title: 'Profile Screen',
           headerTitleStyle: {
             fontSize: 35,
             fontVariant: '700',
@@ -77,6 +77,7 @@ const UserProfileStack = () => {
         options={{
           screenOptions: true,
           title: '',
+          headerShown: false,
         }}
       />
       <Stack.Screen
@@ -94,7 +95,7 @@ const UserProfileStack = () => {
 const Navigator = () => {
   const navigation = useSelector(state => state.screen.screen);
   switch (navigation) {
-    case 'MAIN':
+    case Routes.MAIN:
       return <BottomTabNavigation />;
     case 'USER':
       return <UserProfileStack />;
@@ -102,4 +103,4 @@ const Navigator = () => {
       return <BottomTabNavigation />;
   }
 };
-export {HomeStack, Navigator, CartStack, ProfileStack,UserProfileStack};
+export {HomeStack, Navigator, CartStack, ProfileStack, UserProfileStack};

@@ -2,8 +2,8 @@ import {backendHost} from '../components/apiConfig';
 
 import {useState, useEffect} from 'react';
 
-const useFetch = ({url, method = 'GET', options = {}}) => {
-  const [data, setData] = useState({Aash: 'Tosh'});
+const useFetch = ({url, method = 'GET', options = {}, body = null}) => {
+  const [data, setData] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   console.log(url);
@@ -12,11 +12,12 @@ const useFetch = ({url, method = 'GET', options = {}}) => {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      console.log('control');
+      console.log('control',body);
       try {
         const response = await fetch(`${backendHost}${url}`, {
           method,
           ...options,
+          ...(body && {body: body}), // Add body if provided
         });
 
         if (!response.ok) {

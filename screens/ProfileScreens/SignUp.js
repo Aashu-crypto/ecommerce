@@ -1,4 +1,11 @@
-import {Pressable, StyleSheet, Text, View, TextInput} from 'react-native';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Alert,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Color, FontFamily} from '../../GlobalStyles';
 import SignInput from '../../components/SignInput';
@@ -12,9 +19,14 @@ import {
   GoogleSignin,
 } from '@react-native-google-signin/google-signin';
 import {screen} from '../../redux/slice/ScreenNameSlice';
+import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import LoginSvg from '../../assets/img/loginSvg.svg';
+import useFetch from '../../customHooks/useFetch';
+import {backendHost} from '../../components/apiConfig';
 const SignUp = ({navigation}) => {
   const [mail, setMail] = useState();
   const [password, setPassword] = useState();
+  const [name, setName] = useState();
   const dispatch = useDispatch();
 
   const [state, setState] = useState();
@@ -42,52 +54,67 @@ const SignUp = ({navigation}) => {
       console.log(error);
     }
   }
+  const [res, setRes] = useState();
 
-  const handleSignIn = () => {
-    auth()
-      .createUserWithEmailAndPassword(mail, password)
-      .then(() => {
-        dispatch(setUser({username: mail, password: password, loggedIn: 1}));
-        dispatch(screen('MAIN'));
-        console.log('User account created & signed in!');
-      })
-      .catch(error => {
-        if (error.code === 'auth/email-already-in-use') {
-          console.log('That email address is already in use!');
-        }
+  const handleSignIn = async () => {
+    const data = {username: mail, name: name, password: password};
 
-        if (error.code === 'auth/invalid-email') {
-          console.log('That email address is invalid!');
-        }
-
-        console.error(error);
+    try {
+      const res = await fetch(`${backendHost}/user/createUser`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
       });
+
+      if (!res.ok) {
+        throw new Error('Email already Exists');
+      }
+
+      const json = await res.json();
+      setRes(json);
+
+      if (json.message === 'User Created Successfully') {
+        Alert.alert('Done');
+      } else {
+        // Handle potential errors from the backend (e.g., display json.error)
+      }
+    } catch (error) {
+      Alert.alert('Email already exists');
+      console.error('Error creating user:', error);
+      // Handle general errors (e.g., display a generic error message)
+    }
   };
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>SignUp</Text>
-      <View style={{flex: 1, justifyContent: 'center', alignItem: 'center'}}>
+      <Pressable
+        style={styles.goBack}
+        onPress={() => {
+          console.log('Pressed');
+          dispatch(screen('MAIN'));
+        }}>
+        <Icon name="close" color={Color.appDefaultColor} size={30} />
+      </Pressable>
+      <View style={styles.upperView}>
+        <LoginSvg height="120" width="150" />
+        <Text style={styles.title}>Create Your Account</Text>
+      </View>
+      <View style={styles.lowerView}>
         <View style={styles.containerText}>
           <TextInput
             style={styles.textinput}
-            placeholder={'Email'}
+            placeholder={'enter your email'}
             keyboardType="email-address"
             placeholderTextColor={Color.gray}
             onChangeText={i => {
               setMail(i);
             }}
           />
-        </View>
-        <Text
-          onPress={() => {
-            dispatch(screen('MAIN'));
-          }}>
-          Go back
-        </Text>
-        <View style={styles.containerText}>
+
           <TextInput
             style={styles.textinput}
-            placeholder={'Password'}
+            placeholder={'enter your password'}
             keyboardType="default"
             placeholderTextColor={Color.gray}
             secureTextEntry={true}
@@ -95,14 +122,27 @@ const SignUp = ({navigation}) => {
               setPassword(i);
             }}
           />
+          <TextInput
+            style={styles.textinput}
+            placeholder={'enter your name'}
+            keyboardType="default"
+            placeholderTextColor={Color.gray}
+            onChangeText={i => {
+              setName(i);
+            }}
+          />
         </View>
         <Pressable>
           <Text
-            style={{textAlign: 'right', marginRight: 15}}
+            style={{
+              textAlign: 'right',
+              marginRight: 15,
+              textDecorationLine: 'underline',
+            }}
             onPress={() => {
               navigation.navigate('SignIn');
             }}>
-            Already Have a account -----
+            Already Have a account ?
           </Text>
         </Pressable>
         <Pressable
@@ -122,11 +162,12 @@ const SignUp = ({navigation}) => {
           }}>
           <Text
             style={{
-              fontSize: 14,
+              fontSize: 17,
               lineHeight: 20,
               color: '#fff',
               fontWeight: '500',
               fontFamily: FontFamily.poppinsRegular,
+              letterSpacing: 10,
             }}>
             Sign Up
           </Text>
@@ -152,19 +193,39 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  goBack: {
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+    padding: 15,
+  },
+  upperView: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 20,
+  },
   title: {
-    fontSize: 34,
-    fontWeight: '700',
+    fontSize: 24,
+    fontWeight: '500',
     fontFamily: FontFamily.poppinsBold,
     color: Color.black,
   },
+  lowerView: {
+    flex: 1,
+
+    alignItem: 'center',
+    gap: 15,
+  },
   textinput: {
-    elevation: 2,
-    padding: 15,
+    padding: 10,
     height: 64,
+    backgroundColor: Color.lightestAppColor,
+    borderRadius: 25,
+    borderWidth: 1,
+    borderColor: Color.lighterAppColor,
   },
   containerText: {
     margin: 5,
     padding: 5,
+    gap: 15,
   },
 });

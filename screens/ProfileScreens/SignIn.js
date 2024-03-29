@@ -1,32 +1,69 @@
-import {Pressable, StyleSheet, Text, View, TextInput} from 'react-native';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Alert,
+} from 'react-native';
 import React, {useState} from 'react';
 import {Color, FontFamily} from '../../GlobalStyles';
 import {useDispatch} from 'react-redux';
 import SignInput from '../../components/SignInput';
 import auth from '@react-native-firebase/auth';
+import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import LoginSvg from '../../assets/img/loginSvg.svg';
 import {useNavigation} from '@react-navigation/native';
 import {screen} from '../../redux/slice/ScreenNameSlice';
+import {backendHost} from '../../components/apiConfig';
+import Routes from '../../Routes';
+import {setUser} from '../../redux/slice/UserSlice';
 const SignIn = () => {
   const dispatch = useDispatch();
   const [mail, setMail] = useState();
   const [password, setPassword] = useState();
-  const loginUser = async (email, password) => {
+  const loginUser = async () => {
+    console.log('Pressed');
+    const data = {username: mail, password: password};
+    console.log('bod', data);
     try {
-      let response = await auth().signInWithEmailAndPassword(email, password);
-      if (response && response.user) {
-        console.log('Login Success', response.user);
-        dispatch(screen('MAIN'));
-        // Perform any operations after successful login here
+      const response = await fetch(`${backendHost}/user/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      const json = await response.json();
+      console.log(json);
+      if (json.userId) {
+        dispatch(setUser(json));
+        dispatch(screen(Routes.MAIN));
       }
-    } catch (e) {
-      console.error('Login Error', e.message);
-      // Handle errors here, like incorrect password or no user found
+      else {
+        Alert.alert('Wrong Id or Password')
+      }
+
+     
+    } catch (error) {
+      console.log(error);
     }
   };
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Sign In</Text>
+      <Pressable
+        style={styles.goBack}
+        onPress={() => {
+          console.log('Pressed');
+          dispatch(screen('MAIN'));
+        }}>
+        <Icon name="close" color={Color.appDefaultColor} size={30} />
+      </Pressable>
+      <View style={styles.upperView}>
+        <LoginSvg height="120" width="150" />
+        <Text style={styles.title}>Create Your Account</Text>
+      </View>
       <View style={{flex: 1, justifyContent: 'center', alignItem: 'center'}}>
         <View style={styles.containerText}>
           <TextInput
@@ -74,7 +111,7 @@ const SignIn = () => {
             marginTop: 15,
           }}
           onPress={() => {
-            loginUser(mail, password);
+            loginUser();
           }}>
           <Text
             style={{
@@ -98,6 +135,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  goBack: {
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+    padding: 15,
+  },
+  upperView: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 20,
+  },
   title: {
     fontSize: 34,
     fontWeight: '700',
@@ -105,9 +152,12 @@ const styles = StyleSheet.create({
     color: Color.black,
   },
   textinput: {
-    elevation: 2,
-    padding: 15,
+    padding: 10,
     height: 64,
+    backgroundColor: Color.lightestAppColor,
+    borderRadius: 25,
+    borderWidth: 1,
+    borderColor: Color.lighterAppColor,
   },
   containerText: {
     margin: 5,

@@ -4,7 +4,7 @@ import {Color, FontFamily, width} from '../GlobalStyles';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 const ProfileOptions = ({title, subTitle}) => {
   return (
-    <View style={{width: width, height: 72}}>
+    <View style={{width: '100%', height: 72}}>
       <View
         style={{
           flexDirection: 'row',
@@ -30,9 +30,9 @@ const styles = StyleSheet.create({
     color: Color.black,
     fontFamily: FontFamily.poppinsRegular,
   },
-  subTitle:{
-    fontSize:11,
-    fontWeight:"400",
-    color:Color.gray
-  }
+  subTitle: {
+    fontSize: 11,
+    fontWeight: '400',
+    color: Color.gray,
+  },
 });

@@ -1,4 +1,5 @@
 import {
+  Alert,
   Image,
   Pressable,
   ScrollView,
@@ -8,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import React, {useState, useRef} from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
 import {FontFamily, Color} from '../../GlobalStyles';
 import StarRating from 'react-native-star-rating';
@@ -16,8 +17,10 @@ import {screen} from '../../redux/slice/ScreenNameSlice';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {useNavigation} from '@react-navigation/native';
 import {updateCart} from '../../redux/slice/CartSlice';
+import {backendHost} from '../../components/apiConfig';
 const ProductScreen = ({route}) => {
   const {
+    productId,
     brandname,
     gadgettype,
     rate,
@@ -38,6 +41,29 @@ const ProductScreen = ({route}) => {
   const [selectedColor, setSelectedColor] = useState('black');
   const size = ['XS', 'S', 'M', 'L', 'XL'];
   const color = ['black', 'blue', 'red'];
+  const user = useSelector(state => state.user.data);
+
+  const handleAddToCart = async () => {
+    const body = {
+      userId: user.userId,
+      productId: productId,
+      quantity: 1,
+    };
+    try {
+      const res = await fetch(`${backendHost}/products/addCart`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+      const json = await res.json();
+      console.log(json);
+    } catch (error) {
+      Alert.alert('Error');
+      console.log(error);
+    }
+  };
   return (
     <>
       <ScrollView style={styles.container}>
@@ -147,20 +173,7 @@ const ProductScreen = ({route}) => {
           bottom: 0,
         }}
         onPress={() => {
-          dispatch(
-            updateCart({
-              brandname: brandname,
-              gadgettype: gadgettype,
-              rate: rate,
-              discountedrate: discountedrate,
-              starrating: starrating,
-              imageurl: imageurl,
-              description: description,
-              index: index,
-              selectedColor:selectedColor,
-              selectedSize:selectedSize
-            }),
-          );
+          handleAddToCart();
         }}>
         <Text
           style={{
@@ -172,6 +185,7 @@ const ProductScreen = ({route}) => {
           }}>
           Add to Cart
         </Text>
+        <Text>{productId}</Text>
       </TouchableOpacity>
     </>
   );

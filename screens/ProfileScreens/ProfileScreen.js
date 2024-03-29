@@ -12,37 +12,20 @@ import UserAvatar from 'react-native-user-avatar';
 import ProfileOptions from '../../components/ProfileOptions';
 import {useSelector} from 'react-redux';
 import {setUser} from '../../redux/slice/UserSlice';
-import { screen } from '../../redux/slice/ScreenNameSlice';
+import {screen} from '../../redux/slice/ScreenNameSlice';
 import {useDispatch} from 'react-redux';
 const ProfileScreen = ({navigation}) => {
-  const user = useSelector(state => state.user);
+  const user = useSelector(state => state.user.data);
+  console.log('user', user);
+
   const dispatch = useDispatch();
   const handleLogOut = () => {
-    dispatch(
-      setUser({
-        username: '',
-        password: '',
-        loggedIn: 0,
-      }),
-    );
+    dispatch(setUser({}));
   };
 
- 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={{marginHorizontal: 10}}>
-        {/* <View style={{flexDirection: 'row', marginTop: 14}}>
-          <UserAvatar size={80} name="Aashutosh Gandotra" />
-          <View
-            style={{
-              justifyContent: 'center',
-              padding: 5,
-              marginLeft: 15,
-            }}>
-            <Text style={styles.name}>Aashutosh Gandotra</Text>
-            <Text style={styles.email}>aashugandotra@gmail.com</Text>
-          </View>
-        </View> */}
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('Order');
@@ -74,7 +57,7 @@ const ProfileScreen = ({navigation}) => {
         <TouchableOpacity
           onPress={() => {
             if (user.loggedIn == 0) {
-             dispatch(screen('USER'))
+              dispatch(screen('USER'));
             } else {
               Alert.alert('Logout', 'Are you Sure You want to logOut', [
                 {
@@ -94,7 +77,7 @@ const ProfileScreen = ({navigation}) => {
           />
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
