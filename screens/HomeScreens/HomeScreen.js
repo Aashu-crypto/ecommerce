@@ -18,6 +18,7 @@ import {product} from '../../redux/slice/ProductDataSlice';
 import {Badge} from 'react-native-paper';
 import {backendHost} from '../../components/apiConfig';
 import useFetch from '../../customHooks/useFetch';
+import ShopByCategory from './ShopByCategory';
 const HomeScreen = () => {
   const dispatch = useDispatch();
   const reduxData = useSelector(state => state.product.data);
@@ -25,121 +26,12 @@ const HomeScreen = () => {
   const itemRefs = useRef([]);
   const {data, isLoading, error} = useFetch({url: '/products/details'});
 
-  const data1 = [
-    {
-      orderNumber: 'ORD123456',
-      trackingNumber: 'TRK789012',
-      brandname: 'TechGear',
-      gadgettype: 'Smartphone',
-      rate: '₹215.65',
-      discountedrate: '₹135.86',
-      starrating: 1.7,
-      imageurl: 'https://picsum.photos/200/300?random=1',
-      description:
-        'The TechGear Smartphone is a compact and user-friendly device, offering essential smartphone features at an affordable price. Ideal for users who prioritize ease of use and basic functionality, this phone is equipped with a reliable battery life and a user-friendly interface, making it a great choice for everyday communication and light media consumption.',
-      status: 1,
-    },
-    {
-      orderNumber: 'ORD234567',
-      trackingNumber: 'TRK890123',
-      brandname: 'GizmoPro',
-      gadgettype: 'Tablet',
-      rate: '₹344.93',
-      discountedrate: '₹251.8',
-      starrating: 3.3,
-      imageurl: 'https://picsum.photos/200/300?random=2',
-      description:
-        "GizmoPro's latest tablet is a fusion of sleek design and efficient performance. This device is perfect for users seeking a balance between work and play. With its high-resolution screen and responsive interface, it's great for streaming media, while its robust processing power and business-friendly apps make it suitable for professional use as well.",
-      status: 2,
-    },
-    {
-      orderNumber: 'ORD345678',
-      trackingNumber: 'TRK901234',
-      brandname: 'Electra',
-      gadgettype: 'Laptop',
-      rate: '₹140.98',
-      discountedrate: '₹101.51',
-      starrating: 1.5,
-      imageurl: 'https://picsum.photos/200/300?random=3',
-      description:
-        "Electra's Laptop is designed for users seeking a straightforward, no-frills computing experience. It's well-suited for everyday tasks like web browsing, checking email, and basic document editing. The laptop boasts a simple design, decent battery life, and sufficient storage for everyday use, making it a solid choice for students and casual users.",
-      status: 3,
-    },
-    {
-      orderNumber: 'ORD456789',
-      trackingNumber: 'TRK012345',
-      brandname: 'PixelPlus',
-      gadgettype: 'Smartwatch',
-      rate: '₹338.96',
-      discountedrate: '₹237.27',
-      starrating: 3.8,
-      imageurl: 'https://picsum.photos/200/300?random=4',
-      description:
-        'The PixelPlus Smartwatch is an innovative device that keeps you connected and healthy. This smartwatch not only seamlessly syncs with your smartphone for notifications but also includes features like fitness tracking, heart rate monitoring, and GPS. Its stylish design and durable build make it suitable for both everyday wear and sports activities.',
-      status: 1,
-    },
-    {
-      orderNumber: 'ORD567890',
-      trackingNumber: 'TRK123456',
-      brandname: 'Innovatech',
-      gadgettype: 'Tablet',
-      rate: '₹11.01',
-      discountedrate: '₹9.8',
-      starrating: 4.3,
-      imageurl: 'https://picsum.photos/200/300?random=5',
-      description:
-        "Innovatech Tablet offers a remarkable combination of affordability and efficiency. With a user-friendly interface and a long-lasting battery, it's perfect for reading e-books, browsing the internet, and watching videos. Its lightweight design and portable size make it an excellent choice for on-the-go users who need a reliable device for media consumption and light work.",
-      status: 2,
-    },
-    {
-      orderNumber: 'ORD678901',
-      trackingNumber: 'TRK234567',
-      brandname: 'SoundWave',
-      gadgettype: 'Headphones',
-      rate: '₹196.57',
-      discountedrate: '₹121.87',
-      starrating: 2.3,
-      imageurl: 'https://picsum.photos/200/300?random=6',
-      description:
-        'SoundWave Headphones are designed for audiophiles who appreciate deep, rich sound and comfort. These headphones offer an immersive audio experience, perfect for enjoying music, podcasts, and movies. With features like noise cancellation and a comfortable over-ear design, they provide a premium listening experience for extended periods.',
-      status: 3,
-    },
-    {
-      orderNumber: 'ORD789012',
-      trackingNumber: 'TRK345678',
-      brandname: 'Visionary',
-      gadgettype: 'Laptop',
-      rate: '₹239.21',
-      discountedrate: '₹160.27',
-      starrating: 4.4,
-      imageurl: 'https://picsum.photos/200/300?random=7',
-      description:
-        'The Visionary Laptop is a powerhouse of performance and versatility, catering to both gamers and professionals. It boasts a high-definition display, top-tier graphics, and a fast processor, making it perfect for demanding applications and gaming. Additionally, its sturdy build and advanced cooling system ensure durability and optimal performance during extended use.',
-      status: 1,
-    },
-    {
-      orderNumber: 'ORD890123',
-      trackingNumber: 'TRK456789',
-      brandname: 'SmartTech',
-      gadgettype: 'Camera',
-      rate: '₹405.13',
-      discountedrate: '₹328.16',
-      starrating: 4.7,
-      imageurl: 'https://picsum.photos/200/300?random=8',
-      description:
-        'Capture moments in stunning detail with the SmartTech Camera. It features advanced optics and user-friendly controls, ideal for both amateur and professional photographers. With its high-resolution image capture and versatile shooting modes, this camera is perfect for capturing everything from everyday moments to special events.',
-      status: 2,
-    },
-    // Add orderNumber and trackingNumber for the remaining objects as needed
-  ];
-
   useEffect(() => {
     dispatch(product(data));
     console.log('Product data added to  redux baby');
   });
 
   const renderItem = ({item, index}) => {
-
     return (
       <View>
         <Card
@@ -188,19 +80,18 @@ const HomeScreen = () => {
             </Text>
           </View>
         </ImageBackground>
-        <View>
+        <View style={{padding: 10}}>
           <View
             style={{
               justifyContent: 'space-between',
               flexDirection: 'row',
-              padding: 10,
             }}>
             <Text style={{fontSize: 30, fontWeight: '700', color: '#000'}}>
               New
             </Text>
             <Text style={{fontSize: 12, color: '#000'}}>View All</Text>
           </View>
-          <Text style={{paddingLeft: 10}}>Never Seen Before!</Text>
+          <Text style={{}}>Never Seen Before!</Text>
         </View>
 
         <FlatList
@@ -211,6 +102,7 @@ const HomeScreen = () => {
           horizontal
           showsHorizontalScrollIndicator={false}
         />
+        <ShopByCategory />
       </ScrollView>
     </>
   );

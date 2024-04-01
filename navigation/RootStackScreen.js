@@ -10,6 +10,8 @@ import {Color} from '../GlobalStyles';
 import SignUp from '../screens/ProfileScreens/SignUp';
 import SignIn from '../screens/ProfileScreens/SignIn';
 import Routes from '../Routes';
+import ShopByCategory from '../screens/HomeScreens/ShopByCategory';
+import AllProductByCatergory from '../screens/HomeScreens/AllProductByCatergory';
 
 const Stack = createStackNavigator();
 
@@ -26,6 +28,10 @@ const HomeStack = () => {
         name="Cart"
         component={CartScreen}
         options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name={Routes.PRODUCTBYCATEGORY}
+        component={AllProductByCatergory}
       />
     </Stack.Navigator>
   );
