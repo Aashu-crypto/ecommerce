@@ -23,7 +23,7 @@ const CartScreen = () => {
   const latestScreen = useSelector(state => state.screen.screen);
   console.log('data =>', data);
   const user = useSelector(state => state.user.data);
-  const [totalRate, setTotalRate] = useState(0);
+  const [totalRate, setTotalRate] = useState(1000);
   const KEY_ID = 'rzp_test_iJ36ueg9QGZdkY';
   const SECRET_KEY = 'iFp3t7GbBbyrxz660CjPvnxe';
   useEffect(() => {
@@ -33,7 +33,7 @@ const CartScreen = () => {
         accumulator + parseFloat(item.rate.replace('₹', '')),
       0,
     );
-    setTotalRate(newTotalRate);
+    setTotalRate(2000);
   }, [data]);
   const [cartItems, setCartItems] = useState();
   useEffect(() => {
@@ -100,7 +100,7 @@ const CartScreen = () => {
         );
       })}
       <View style={styles.textView}>
-        <Text style={styles.totalText}>Total Amount: </Text>
+        <Text style={styles.totalText}>Total Amount: {totalRate} </Text>
         <Text
           style={{
             color: Color.black,

@@ -2,7 +2,7 @@ import {configureStore, combineReducers} from '@reduxjs/toolkit';
 import ScreenNameSlice from './slice/ScreenNameSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CartSlice from './slice/CartSlice';
-import ProductDataSlice, { product } from './slice/ProductDataSlice';
+import ProductDataSlice, {product} from './slice/ProductDataSlice';
 import UserSlice from './slice/UserSlice';
 import {
   persistReducer,
@@ -16,14 +16,14 @@ import {
 } from 'redux-persist';
 const rootReducer = combineReducers({
   screen: ScreenNameSlice,
-  cart:CartSlice,
-  product:ProductDataSlice,
-  user:UserSlice
+  cart: CartSlice,
+  product: ProductDataSlice,
+  user: UserSlice,
 });
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  blacklist: ['screen',],
+  blacklist: ['screen'],
 };
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 export const store = configureStore({
