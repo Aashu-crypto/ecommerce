@@ -4,7 +4,7 @@ import {Color, FontFamily, width} from '../GlobalStyles';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 const ProfileOptions = ({title, subTitle}) => {
   return (
-    <View style={{width: '100%', height: 72}}>
+    <View style={{width: '100%', height:100,backgroundColor:Color.lightestAppColor}}>
       <View
         style={{
           flexDirection: 'row',

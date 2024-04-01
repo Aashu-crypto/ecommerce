@@ -16,6 +16,7 @@ import {FlashList} from '@shopify/flash-list';
 import {Color, FontFamily} from '../../GlobalStyles';
 import CartCard from '../../components/CartCard';
 import RazorpayCheckout from 'react-native-razorpay';
+import {useFocusEffect} from '@react-navigation/native';
 import {backendHost} from '../../components/apiConfig';
 
 const CartScreen = () => {
@@ -36,25 +37,28 @@ const CartScreen = () => {
     setTotalRate(newTotalRate);
   }, [data]);
   const [cartItems, setCartItems] = useState();
-  useEffect(() => {
-    console.log('useEffeevt');
-    const fetchData = async () => {
-      console.log(user.userId);
-      try {
-        const response = await fetch(
-          `${backendHost}/products/cartItems/${user.userId}`,
-        );
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log('useEffeevt');
+      const fetchData = async () => {
+        console.log(user.userId);
+        try {
+          const response = await fetch(
+            `${backendHost}/products/cartItems/${user.userId}`,
+          );
 
-        const json = await response.json();
-        setCartItems(json[0].item);
-        console.log('json', json[0].item);
-      } catch (error) {
-        Alert.alert('Some error Occured');
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, []);
+          const json = await response.json();
+          setCartItems(json[0].item);
+          console.log('json', json[0].item);
+        } catch (error) {
+          Alert.alert('Some error Occured');
+          console.log(error);
+        }
+      };
+      fetchData();
+    }, []),
+  );
+
   const handlePayment = () => {
     var options = {
       description: 'Full on Shopping',
@@ -96,6 +100,7 @@ const CartScreen = () => {
             description={i.description}
             selectedColor={i.selectedColor}
             selectedSize={i.selectedSize}
+            quantity={i.quantity}
           />
         );
       })}

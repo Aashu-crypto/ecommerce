@@ -12,13 +12,14 @@ const CartCard = ({
   description,
   selectedColor,
   selectedSize,
+  quantity,
 }) => {
-  const [quantity, setQuantity] = useState(1);
+  const [quantityItem, setQuantity] = useState(quantity);
   const [price, setPrice] = useState(discountedrate);
   const [totalCost, setTotalCost] = useState(0);
   useEffect(() => {
-    setTotalCost(price * quantity); 
-}, [price, quantity]);
+    setTotalCost(price * quantityItem);
+  }, [price, quantityItem]);
   return (
     <View style={styles.card}>
       <View style={{flexDirection: 'row'}}>
@@ -70,15 +71,15 @@ const CartCard = ({
                 name="minus-circle"
                 size={24}
                 onPress={() => {
-                  setQuantity(quantity - 1);
+                  setQuantity(quantityItem - 1);
                 }}
               />
-              <Text> {quantity} </Text>
+              <Text> {quantityItem} </Text>
               <Icon
                 name="plus-circle"
                 size={24}
                 onPress={() => {
-                  setQuantity(quantity + 1);
+                  setQuantity(quantityItem + 1);
                 }}
               />
             </View>
@@ -86,7 +87,7 @@ const CartCard = ({
               <Text>Rs {discountedrate}</Text>
               <Text style={{textAlign: 'right'}}>
                 {' '}
-                * {quantity} =Rs {totalCost}
+                * {quantityItem} =Rs {totalCost}
               </Text>
             </View>
           </View>
@@ -100,7 +101,7 @@ export default CartCard;
 
 const styles = StyleSheet.create({
   card: {
-    width: width / 1.1,
+    width: '90%',
     height: height / 7,
     marginHorizontal: 16,
     marginVertical: 8,
