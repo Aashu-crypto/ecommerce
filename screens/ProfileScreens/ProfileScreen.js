@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
 
   header: {
     height: headerHeight,
-    backgroundColor: Color.lightestAppColor,
+   
     position: 'absolute',
     width: '100%',
     alignItems: 'center',
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     height: imageSize,
     width: imageSize,
     borderRadius: headerHeight,
-    backgroundColor: Color.lightestAppColor,
+  
     alignItems: 'center',
     justifyContent: 'center',
   },

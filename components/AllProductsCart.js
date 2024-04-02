@@ -48,7 +48,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     margin: 10,
     borderRadius: 10,
-    backgroundColor: Color.lightestAppColor,
+   
+
   },
   img: {
     height: height / 9,

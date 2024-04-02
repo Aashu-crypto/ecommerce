@@ -1,7 +1,8 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StatusBar, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {useSelector} from 'react-redux';
 import AllProductsCart from '../../components/AllProductsCart';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const AllProductByCatergory = ({route}) => {
   const name = route.params.name;
@@ -9,7 +10,8 @@ const AllProductByCatergory = ({route}) => {
   console.log(reduxData);
 
   return (
-    <View style={{flex:1,backgroundColor:'#fff'}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
+      <StatusBar backgroundColor={'#fff'} barStyle="dark-content" />
       {reduxData
         .filter(item => item.categories == name)
         .map((item, index) => (
@@ -25,7 +27,7 @@ const AllProductByCatergory = ({route}) => {
             index={index}
           />
         ))}
-    </View>
+    </SafeAreaView>
   );
 };
 
