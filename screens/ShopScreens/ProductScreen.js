@@ -7,8 +7,9 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Animated,
 } from 'react-native';
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
 import {FontFamily, Color} from '../../GlobalStyles';
@@ -18,7 +19,9 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import {useNavigation} from '@react-navigation/native';
 import {updateCart} from '../../redux/slice/CartSlice';
 import {backendHost} from '../../components/apiConfig';
-const ProductScreen = ({route}) => {
+import {width, height} from '../../GlobalStyles';
+
+export default ProductScreen = ({route}) => {
   const {
     productId,
     brandname,
@@ -42,6 +45,24 @@ const ProductScreen = ({route}) => {
   const size = ['XS', 'S', 'M', 'L', 'XL'];
   const color = ['black', 'blue', 'red'];
   const user = useSelector(state => state.user.data);
+  const data = [{url: imageurl}, {url: imageurl}, {url: imageurl}];
+  const mainScrollValue = useRef(new Animated.Value(0).current);
+  const scrollValue = useRef(new Animated.Value(0)).current;
+  const translateX = scrollValue.interpolate({
+    inputRange: [0, width],
+    outputRange: [0, 20],
+  });
+  const inputRange = [0];
+  const scaleOutputRange = [1];
+  data.forEach(
+    (_, i) =>
+      i != 0 && inputRange.push(...[(width * (2 * i - 1)) / 2, width * i]),
+  );
+  data.forEach((_, i) => i != 0 && scaleOutputRange.push(...[0, 1]));
+  const scaleX = scrollValue.interpolate({
+    inputRange,
+    outputRange: scaleOutputRange,
+  });
 
   const handleAddToCart = async () => {
     const body = {
@@ -64,15 +85,45 @@ const ProductScreen = ({route}) => {
       console.log(error);
     }
   };
+  useEffect(() => {
+    console.log(mainScrollValue);
+  }, [mainScrollValue]);
   return (
     <>
-      <ScrollView style={styles.container}>
+      <ScrollView
+        style={styles.container}
+        onScroll={Animated.event(
+          [{nativeEvent: {contentOffset: {y: mainScrollValue.value}}}],
+          {useNativeDriver: false},
+        )}>
         <View>
-          <ScrollView horizontal>
-            <Image source={{uri: imageurl}} style={styles.image} />
-            <Image source={{uri: imageurl}} style={styles.image} />
-            <Image source={{uri: image}} style={styles.image} />
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            decelerationRate="fast"
+            pagingEnabled
+            onScroll={Animated.event(
+              [{nativeEvent: {contentOffset: {x: scrollValue}}}],
+              {useNativeDriver: false},
+            )}>
+            {data.map(item => (
+              <Image source={{uri: item.url}} style={styles.image} />
+            ))}
           </ScrollView>
+          <View style={styles.indicatorConatiner} pointerEvents="none">
+            {data.map(item => (
+              <Indicator />
+            ))}
+            <Animated.View
+              style={[
+                styles.activeIndicator,
+                {
+                  position: 'absolute',
+                  transform: [{translateX}, {scaleX}],
+                },
+              ]}
+            />
+          </View>
         </View>
         <View
           style={{
@@ -108,7 +159,7 @@ const ProductScreen = ({route}) => {
               flexDirection: 'row',
             }}>
             <Text style={styles.brandname}>{brandname}</Text>
-            <Text style={styles.brandname}>{discountedrate}</Text>
+            <Text style={styles.brandname}> Rs {discountedrate}</Text>
           </View>
           <Text style={styles.gadgettype}>{gadgettype}</Text>
 
@@ -160,38 +211,18 @@ const ProductScreen = ({route}) => {
         </RBSheet>
       </ScrollView>
       <TouchableOpacity
-        style={{
-          backgroundColor: Color.appDefaultColor,
-          height: 48,
-          width: 343,
-          alignItems: 'center',
-          alignSelf: 'center',
-          justifyContent: 'center',
-          borderRadius: 25,
-          margin: 5,
-          position: 'absolute',
-          bottom: 0,
-        }}
+        style={styles.addToCart}
         onPress={() => {
           handleAddToCart();
         }}>
-        <Text
-          style={{
-            fontSize: 14,
-            lineHeight: 20,
-            color: '#fff',
-            fontWeight: '500',
-            fontFamily: FontFamily.poppinsRegular,
-          }}>
-          Add to Cart
-        </Text>
-        <Text>{productId}</Text>
+        <Text style={styles.addToCartText}>Add to Cart</Text>
       </TouchableOpacity>
     </>
   );
 };
-
-export default ProductScreen;
+function Indicator() {
+  return <View style={styles.indicator} />;
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -199,7 +230,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   image: {
-    width: 275,
+    width: width,
     height: 413,
     margin: 1,
   },
@@ -209,10 +240,10 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 8,
     borderWidth: 0.5,
-    borderColor: Color.gray,
+
     shadowColor: '#000000', // This is a hex code for black color
     shadowOffset: {width: 0, height: 2}, // You can adjust width and height according to your requirement
-    shadowOpacity: 0.25, // 0x40000000 translates to a 25% opacity
+    shadowOpacity: 0.25,
     shadowRadius: 3.84, // This can be adjusted to suit your design
 
     alignItems: 'center',
@@ -222,14 +253,13 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderRadius: 30,
     alignSelf: 'center',
-    borderColor: Color.gray,
   },
   selectBtnText: {
     padding: 10,
     fontSize: 14,
     lineHeight: 20,
     fontWeight: '500',
-    fontFamily: FontFamily.poppinsRegular,
+    fontFamily: FontFamily.poppinsBold,
     color: Color.black,
   },
   brandname: {
@@ -289,5 +319,45 @@ const styles = StyleSheet.create({
     color: Color.black,
     marginVertical: 8,
     width: '95%',
+  },
+  addToCart: {
+    backgroundColor: Color.appDefaultColor,
+    height: 48,
+    width: 343,
+    alignItems: 'center',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    borderRadius: 25,
+    margin: 5,
+    position: 'absolute',
+    bottom: 0,
+  },
+  addToCartText: {
+    fontSize: 16,
+    lineHeight: 20,
+    color: '#fff',
+    fontWeight: '500',
+    fontFamily: FontFamily.poppinsRegular,
+    letterSpacing: 2,
+  },
+  indicator: {
+    height: 10,
+    width: 10,
+    borderRadius: 5,
+    backgroundColor: '#00000044',
+    marginHorizontal: 5,
+  },
+  indicatorConatiner: {
+    alignSelf: 'center',
+    position: 'absolute',
+    bottom: 20,
+    flexDirection: 'row',
+  },
+  activeIndicator: {
+    height: 10,
+    width: 10,
+    borderRadius: 5,
+    backgroundColor: '#fff',
+    marginHorizontal: 5,
   },
 });

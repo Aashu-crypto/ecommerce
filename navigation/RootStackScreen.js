@@ -32,7 +32,7 @@ const HomeStack = () => {
       <Stack.Screen
         name={Routes.PRODUCTBYCATEGORY}
         component={AllProductByCatergory}
-        options={{headerShown: false}}
+        options={{headerShown: true}}
       />
     </Stack.Navigator>
   );

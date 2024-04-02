@@ -1,14 +1,18 @@
 import {StatusBar, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React,{useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import AllProductsCart from '../../components/AllProductsCart';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-const AllProductByCatergory = ({route}) => {
+const AllProductByCatergory = ({route,navigation}) => {
   const name = route.params.name;
   const reduxData = useSelector(state => state.product.data);
   console.log(reduxData);
-
+  useEffect(()=>{
+    navigation.setOptions({
+      title:`${name}`
+    })
+})
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
       <StatusBar backgroundColor={'#fff'} barStyle="dark-content" />

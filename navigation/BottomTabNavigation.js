@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreens/HomeScreen';
@@ -26,7 +26,7 @@ export default function BottomTabNavigation() {
         component={HomeStack}
         options={{
           tabBarIcon: ({focused}) => (
-            <View>
+            <View style={styles.icon}>
               <Icon
                 name="home"
                 color={focused && Color.appDefaultColor}
@@ -37,6 +37,8 @@ export default function BottomTabNavigation() {
           tabBarButton: props => <TouchableRipple {...props} />,
 
           tabBarActiveTintColor: Color.appDefaultColor,
+          tabBarLabel: 'Home',
+          tabBarActiveBackgroundColor: Color.lightestAppColor,
         }}
       />
       <Tab.Screen
@@ -44,17 +46,18 @@ export default function BottomTabNavigation() {
         component={CartStack}
         options={{
           tabBarIcon: ({focused}) => (
-            <View style={{flexDirection: 'row'}}>
+            <View style={styles.icon}>
               <Icon
                 name="shopping-cart"
                 color={focused && Color.appDefaultColor}
                 size={26}
               />
-              <Badge style= {{}}>6</Badge>
             </View>
           ),
           tabBarActiveTintColor: Color.appDefaultColor,
           tabBarButton: props => <TouchableRipple {...props} />,
+          tabBarLabel: 'Cart',
+          tabBarActiveBackgroundColor: Color.lightestAppColor,
         }}
       />
       <Tab.Screen
@@ -62,7 +65,7 @@ export default function BottomTabNavigation() {
         component={ProfileStack}
         options={{
           tabBarIcon: ({focused}) => (
-            <View>
+            <View style={styles.icon}>
               <Icon
                 name="user-circle-o"
                 color={focused && Color.appDefaultColor}
@@ -72,8 +75,21 @@ export default function BottomTabNavigation() {
           ),
           tabBarActiveTintColor: Color.appDefaultColor,
           tabBarButton: props => <TouchableRipple {...props} />,
+          tabBarLabel: 'Profile',
+
+          tabBarActiveBackgroundColor: Color.lightestAppColor,
         }}
       />
     </Tab.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  icon: {
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    padding: 3,
+    borderRadius: 10,
+  },
+});
