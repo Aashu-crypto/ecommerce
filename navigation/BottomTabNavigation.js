@@ -57,7 +57,7 @@ export default function BottomTabNavigation() {
           tabBarActiveTintColor: Color.appDefaultColor,
           tabBarButton: props => <TouchableRipple {...props} />,
           tabBarLabel: 'Cart',
-          tabBarActiveBackgroundColor: Color.lightestAppColor,
+          tabBarActiveBackgroundColor: Color.lightpurple,
         }}
       />
       <Tab.Screen
@@ -77,7 +77,7 @@ export default function BottomTabNavigation() {
           tabBarButton: props => <TouchableRipple {...props} />,
           tabBarLabel: 'Profile',
 
-          tabBarActiveBackgroundColor: Color.lightestAppColor,
+          tabBarActiveBackgroundColor: Color.lightpurple,
         }}
       />
     </Tab.Navigator>

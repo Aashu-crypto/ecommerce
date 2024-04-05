@@ -19,12 +19,15 @@ import {useDispatch} from 'react-redux';
 import {width} from '../../GlobalStyles';
 import MaleAvater from '../../assets/img/maleAvatar.svg';
 import Svg, {Circle, Polygon, Path, G} from 'react-native-svg';
-const headerHeight = 300;
+import HeaderComponent from '../../components/HeaderComponent';
+import {updateCart} from '../../redux/slice/CartSlice';
+const headerHeight = 280;
 const headerFinalHeight = 70;
 const imageSize = (headerHeight / 3) * 2;
 const mySvg = ({}) => {};
 const ProfileScreen = ({navigation}) => {
   const user = useSelector(state => state.user.data);
+
   console.log('user', user);
   const [textWidth, setTextWidth] = useState(0);
   const scrollY = useRef(new Animated.Value(0)).current;
@@ -66,6 +69,7 @@ const ProfileScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const handleLogOut = () => {
     dispatch(setUser({}));
+    dispatch(updateCart([]));
   };
   const profileOptionsData = [
     {title: 'My orders', subTitle: 'Already have 12 orders"'},
@@ -76,7 +80,8 @@ const ProfileScreen = ({navigation}) => {
     {title: 'Setting', subTitle: 'Notification, passwords'},
   ];
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <HeaderComponent title="My Profile" icon="user" />
       <Animated.View
         pointerEvents="none"
         style={[styles.header, {transform: [{translateY: translateHeader}]}]}>
@@ -102,6 +107,7 @@ const ProfileScreen = ({navigation}) => {
           {user.name}
         </Animated.Text>
       </Animated.View>
+
       <ScrollView
         style={{marginHorizontal: 10}}
         contentContainerStyle={styles.scrollContainer}
@@ -110,7 +116,6 @@ const ProfileScreen = ({navigation}) => {
           [{nativeEvent: {contentOffset: {y: scrollY}}}],
           {useNativeDriver: false},
         )}>
-        
         <View>
           {profileOptionsData.map((option, index) => (
             <TouchableOpacity key={index}>
@@ -142,7 +147,7 @@ const ProfileScreen = ({navigation}) => {
           />
         </TouchableOpacity>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -152,6 +157,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    marginTop: 20,
   },
   name: {
     fontSize: 18,
@@ -170,12 +176,13 @@ const styles = StyleSheet.create({
 
   header: {
     height: headerHeight,
-   
+    marginTop: 60,
     position: 'absolute',
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 1,
+    zIndex: 100,
+    backgroundColor: '#fff',
   },
   scrollContainer: {
     paddingTop: headerHeight + 5,
@@ -184,7 +191,7 @@ const styles = StyleSheet.create({
     height: imageSize,
     width: imageSize,
     borderRadius: headerHeight,
-  
+
     alignItems: 'center',
     justifyContent: 'center',
   },

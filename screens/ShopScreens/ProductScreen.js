@@ -85,17 +85,13 @@ export default ProductScreen = ({route}) => {
       console.log(error);
     }
   };
+
   useEffect(() => {
-    console.log(mainScrollValue);
+    console.log('main', mainScrollValue.value);
   }, [mainScrollValue]);
   return (
     <>
-      <ScrollView
-        style={styles.container}
-        onScroll={Animated.event(
-          [{nativeEvent: {contentOffset: {y: mainScrollValue.value}}}],
-          {useNativeDriver: false},
-        )}>
+      <ScrollView style={styles.container}>
         <View>
           <ScrollView
             horizontal

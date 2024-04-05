@@ -8,6 +8,7 @@ import {
   Pressable,
   TouchableOpacity,
   Alert,
+  StatusBar,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -18,25 +19,22 @@ import CartCard from '../../components/CartCard';
 import RazorpayCheckout from 'react-native-razorpay';
 import {useFocusEffect} from '@react-navigation/native';
 import {backendHost} from '../../components/apiConfig';
-
+import HeaderComponent from '../../components/HeaderComponent';
+import {useDispatch} from 'react-redux';
+import {screen} from '../../redux/slice/ScreenNameSlice';
+import Routes from '../../Routes';
+import {updateCart} from '../../redux/slice/CartSlice';
 const CartScreen = () => {
   const data = useSelector(state => state.cart.cart);
   const latestScreen = useSelector(state => state.screen.screen);
   console.log('data =>', data);
   const user = useSelector(state => state.user.data);
-  const [totalRate, setTotalRate] = useState(1000);
+
   const KEY_ID = 'rzp_test_iJ36ueg9QGZdkY';
   const SECRET_KEY = 'iFp3t7GbBbyrxz660CjPvnxe';
-  useEffect(() => {
-    // Calculate the total rate when the component mounts or when data changes
-    const newTotalRate = data.reduce(
-      (accumulator, item) =>
-        accumulator + parseFloat(item.rate.replace('₹', '')),
-      0,
-    );
-    setTotalRate(2000);
-  }, [data]);
-  const [cartItems, setCartItems] = useState();
+  const dispatch = useDispatch();
+
+  const [cartItems, setCartItems] = useState([]);
   useFocusEffect(
     React.useCallback(() => {
       console.log('useEffeevt');
@@ -48,16 +46,35 @@ const CartScreen = () => {
           );
 
           const json = await response.json();
-          setCartItems(json[0].item);
-          console.log('json', json[0].item);
+          if (json.message == 'Cart is Empty') {
+            console.log('cart');
+            setCartItems([]);
+          } else {
+            setCartItems(json[0].item);
+            console.log('json', json[0]);
+            dispatch(updateCart(json[0].item));
+          }
         } catch (error) {
           Alert.alert('Some error Occured');
           console.log(error);
         }
       };
       fetchData();
-    }, []),
+    }, [cartItems.length]),
   );
+  const [totalRate, setTotalRate] = useState(0);
+
+  useEffect(() => {
+    console.log('use Effect is running');
+    if (cartItems.length !== 0) {
+      const newTotalRate =
+        cartItems.reduce(
+          (accumulator, item) => accumulator + item.price * item.quantity,
+          0,
+        ) + 0; // Add 1000 as the initial value
+      setTotalRate(newTotalRate);
+    }
+  }, [cartItems]);
 
   const handlePayment = () => {
     var options = {
@@ -84,65 +101,88 @@ const CartScreen = () => {
         alert(`Error: ${error.code} | ${error.description}`);
       });
   };
-
+  const handleCheckout = () => {
+    dispatch(screen(Routes.CARTSUBMIT));
+  };
   return (
     <SafeAreaView style={{marginTop: 20, flex: 1, backgroundColor: '#fff'}}>
-      <Text style={styles.cartTitle}>My Bag</Text>
-      {cartItems?.map(i => {
-        return (
-          <CartCard
-            brandname={i.name}
-            gadgettype={i.gadgettype}
-            rate={i.price}
-            discountedrate={i.price}
-            starrating={i.starrating}
-            imageurl={i.imageUrl}
-            description={i.description}
-            selectedColor={i.selectedColor}
-            selectedSize={i.selectedSize}
-            quantity={i.quantity}
-          />
-        );
-      })}
-      <View style={styles.textView}>
-        <Text style={styles.totalText}>Total Amount: {totalRate} </Text>
-        <Text
-          style={{
-            color: Color.black,
-            fontSize: 18,
-            lineHeight: 22,
-            fontWeight: '400',
-            fontFamily: FontFamily.poppinsBold,
-          }}>
-          {' '}
-          ₹{totalRate.toFixed(2)}
-        </Text>
-      </View>
-      <TouchableOpacity
-        style={{
-          backgroundColor: Color.appDefaultColor,
-          height: 48,
-          width: 343,
-          alignItems: 'center',
-          alignSelf: 'center',
-          justifyContent: 'center',
-          borderRadius: 25,
-          margin: 5,
-          position: 'absolute',
-          bottom: 0,
-        }}
-        onPress={handlePayment}>
-        <Text
-          style={{
-            fontSize: 14,
-            lineHeight: 20,
-            color: '#fff',
-            fontWeight: '500',
-            fontFamily: FontFamily.poppinsRegular,
-          }}>
-          Check Out
-        </Text>
-      </TouchableOpacity>
+      <HeaderComponent title="My Express Cart" icon="shopping-bag" />
+      {data.length != 0 ? (
+        <View style={{flex: 1}}>
+          {data?.map(i => {
+            const deleteCartItem = async () => {
+              const body = {
+                userId: user.userId,
+                productId: i.productId,
+              };
+              console.log('delete cart');
+              try {
+                const response = await fetch(
+                  `${backendHost}/products/deleteCartItem`,
+                  {
+                    method: 'PUT',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(body),
+                  },
+                );
+                const json = response.json();
+                console.log(json);
+              } catch (error) {
+                console.log(error);
+              }
+            };
+            return (
+              <CartCard
+                key={i.productId}
+                brandname={i.name}
+                gadgettype={i.gadgettype}
+                rate={i.price}
+                discountedrate={i.price}
+                starrating={i.starrating}
+                imageurl={i.imageUrl}
+                description={i.description}
+                selectedColor={i.selectedColor}
+                selectedSize={i.selectedSize}
+                quantity={i.quantity}
+                productId={i.productId}
+                deleteItem={deleteCartItem}
+              />
+            );
+          })}
+          <View style={styles.textView}>
+            <Text style={styles.totalText}>Total Amount: </Text>
+            <Text
+              style={{
+                color: Color.black,
+                fontSize: 18,
+                lineHeight: 22,
+                fontWeight: '400',
+                fontFamily: FontFamily.poppinsBold,
+              }}>
+              {' '}
+              ₹{totalRate.toFixed(2)}
+            </Text>
+          </View>
+          <TouchableOpacity style={styles.checkOutBtn} onPress={handleCheckout}>
+            <Text
+              style={{
+                fontSize: 14,
+                lineHeight: 20,
+                color: '#fff',
+                fontWeight: '500',
+                fontFamily: FontFamily.poppinsRegular,
+              }}>
+              Check Out
+            </Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Text style={styles.emptyCart}>Cart is empty</Text>
+        </View>
+      )}
     </SafeAreaView>
   );
 };
@@ -166,8 +206,26 @@ const styles = StyleSheet.create({
   textView: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     marginHorizontal: 16,
     marginVertical: 8,
+
+    flex: 1,
+  },
+  emptyCart: {
+    fontSize: 25,
+    fontWeight: '600',
+    color: Color.black,
+    fontFamily: FontFamily.poppinsBold,
+  },
+  checkOutBtn: {
+    backgroundColor: Color.appDefaultColor,
+    height: 48,
+    width: 343,
+    alignItems: 'center',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    borderRadius: 25,
+    margin: 5,
   },
 });

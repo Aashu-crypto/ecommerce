@@ -7,13 +7,16 @@ import {PersistGate} from 'redux-persist/integration/react';
 import {store, persistor} from './redux/store';
 import {Navigator} from './navigation/RootStackScreen';
 import {Provider} from 'react-redux';
+import {MenuProvider} from 'react-native-popup-menu';
 const App = () => {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <NavigationContainer>
           <PaperProvider>
-            <Navigator/>
+            <MenuProvider>
+              <Navigator />
+            </MenuProvider>
           </PaperProvider>
         </NavigationContainer>
       </PersistGate>

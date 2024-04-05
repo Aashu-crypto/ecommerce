@@ -45,12 +45,11 @@ const Card = ({
       </View>
 
       <Text style={styles.brandname}>{brandname}</Text>
-      
 
       <Text style={styles.gadgettype}>{gadgettype}</Text>
       <View style={{flexDirection: 'row'}}>
         <Text style={styles.rate}>{rate}</Text>
-        <Text style={styles.discountedrate}>{discountedrate}</Text>
+        <Text style={styles.discountedrate}> Rs {discountedrate}</Text>
       </View>
     </TouchableOpacity>
   );

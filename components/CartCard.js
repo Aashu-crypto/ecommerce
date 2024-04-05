@@ -2,6 +2,16 @@ import {StyleSheet, Text, View, Image, Pressable} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Color, FontFamily, height, width} from '../GlobalStyles';
+import {backendHost} from './apiConfig';
+import {useSelector} from 'react-redux';
+
+import {
+  Menu,
+  MenuProvider,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+} from 'react-native-popup-menu';
 const CartCard = ({
   brandname,
   gadgettype,
@@ -13,6 +23,8 @@ const CartCard = ({
   selectedColor,
   selectedSize,
   quantity,
+  productId,
+  deleteItem,
 }) => {
   const [quantityItem, setQuantity] = useState(quantity);
   const [price, setPrice] = useState(discountedrate);
@@ -20,6 +32,55 @@ const CartCard = ({
   useEffect(() => {
     setTotalCost(price * quantityItem);
   }, [price, quantityItem]);
+  const user = useSelector(state => state.user.data);
+
+  const handleDecrease = async () => {
+    const body = {
+      userId: user.userId,
+      productId: productId,
+      quantity: -1,
+    };
+    setQuantity(quantityItem - 1);
+    console.log('Body', body);
+    try {
+      const res = await fetch(`${backendHost}/products/addCart`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+      const json = await res.json();
+      console.log(json);
+    } catch (error) {
+      Alert.alert('Error');
+      console.log(error);
+    }
+  };
+  const handleIncrease = async () => {
+    const body = {
+      userId: user.userId,
+      productId: productId,
+      quantity: 1,
+    };
+    setQuantity(quantityItem + 1);
+    console.log('Body', body);
+    try {
+      const res = await fetch(`${backendHost}/products/addCart`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+      const json = await res.json();
+      console.log(json);
+    } catch (error) {
+      Alert.alert('Error');
+      console.log(error);
+    }
+  };
+
   return (
     <View style={styles.card}>
       <View style={{flexDirection: 'row'}}>
@@ -40,8 +101,11 @@ const CartCard = ({
               justifyContent: 'space-between',
             }}>
             <Text style={styles.brandText}>{brandname}</Text>
-            <Pressable>
-              <Icon name="dots-vertical" size={20} />
+            <Pressable
+              onPress={() => {
+                deleteItem();
+              }}>
+              <Icon name="delete-outline" size={20} />
             </Pressable>
           </View>
           {/* <View style={{flexDirection: 'row'}}>
@@ -71,7 +135,7 @@ const CartCard = ({
                 name="minus-circle"
                 size={24}
                 onPress={() => {
-                  setQuantity(quantityItem - 1);
+                  handleDecrease();
                 }}
               />
               <Text> {quantityItem} </Text>
@@ -79,15 +143,14 @@ const CartCard = ({
                 name="plus-circle"
                 size={24}
                 onPress={() => {
-                  setQuantity(quantityItem + 1);
+                  handleIncrease();
                 }}
               />
             </View>
-            <View style={{flexDirection: 'row'}}>
-              <Text>Rs {discountedrate}</Text>
-              <Text style={{textAlign: 'right'}}>
-                {' '}
-                * {quantityItem} =Rs {totalCost}
+            <View>
+              <Text
+                style={{textAlign: 'right', ellipsizeMode: 'tail', width: 130}}>
+                Rs {discountedrate} * {quantityItem} =Rs {totalCost}
               </Text>
             </View>
           </View>
@@ -114,6 +177,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: Color.black,
     fontFamily: FontFamily.poppinsBold,
+    width: 180,
   },
   sizeColorText: {
     fontSize: 11,

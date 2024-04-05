@@ -12,6 +12,7 @@ import SignIn from '../screens/ProfileScreens/SignIn';
 import Routes from '../Routes';
 import ShopByCategory from '../screens/HomeScreens/ShopByCategory';
 import AllProductByCatergory from '../screens/HomeScreens/AllProductByCatergory';
+import Address from '../screens/PaymentScreens/Address';
 
 const Stack = createStackNavigator();
 
@@ -50,7 +51,11 @@ const CartStack = () => {
 };
 const ProfileStack = () => {
   return (
-    <Stack.Navigator initialRouteName="Profile">
+    <Stack.Navigator
+      initialRouteName="Profile"
+      screenOptions={{
+        headerShown: false,
+      }}>
       <Stack.Screen
         name="Profile"
         component={ProfileScreen}
@@ -99,6 +104,17 @@ const UserProfileStack = () => {
   );
 };
 
+const PaymentStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}>
+      <Stack.Screen name={Routes.ADDRESS} component={Address} />
+    </Stack.Navigator>
+  );
+};
+
 const Navigator = () => {
   const navigation = useSelector(state => state.screen.screen);
   switch (navigation) {
@@ -106,6 +122,8 @@ const Navigator = () => {
       return <BottomTabNavigation />;
     case 'USER':
       return <UserProfileStack />;
+    case Routes.CARTSUBMIT:
+      return <PaymentStack />;
     default:
       return <BottomTabNavigation />;
   }

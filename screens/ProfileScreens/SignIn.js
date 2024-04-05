@@ -154,10 +154,10 @@ const styles = StyleSheet.create({
   textinput: {
     padding: 10,
     height: 64,
-    backgroundColor: Color.lightestAppColor,
+    backgroundColor: Color.lightpurple,
     borderRadius: 25,
     borderWidth: 1,
-    borderColor: Color.lighterAppColor,
+    borderColor: Color.appDefaultColor,
   },
   containerText: {
     margin: 5,
