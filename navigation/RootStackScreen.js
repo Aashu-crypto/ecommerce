@@ -13,6 +13,7 @@ import Routes from '../Routes';
 import ShopByCategory from '../screens/HomeScreens/ShopByCategory';
 import AllProductByCatergory from '../screens/HomeScreens/AllProductByCatergory';
 import Address from '../screens/PaymentScreens/Address';
+import AddAddress from '../screens/PaymentScreens/AddAddress';
 
 const Stack = createStackNavigator();
 
@@ -111,6 +112,7 @@ const PaymentStack = () => {
         headerShown: false,
       }}>
       <Stack.Screen name={Routes.ADDRESS} component={Address} />
+      <Stack.Screen name={Routes.ADDADDRESS} component={AddAddress} />
     </Stack.Navigator>
   );
 };

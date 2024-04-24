@@ -16,7 +16,7 @@ import {useSelector} from 'react-redux';
 import {FlashList} from '@shopify/flash-list';
 import {Color, FontFamily} from '../../GlobalStyles';
 import CartCard from '../../components/CartCard';
-import RazorpayCheckout from 'react-native-razorpay';
+
 import {useFocusEffect} from '@react-navigation/native';
 import {backendHost} from '../../components/apiConfig';
 import HeaderComponent from '../../components/HeaderComponent';
@@ -30,8 +30,7 @@ const CartScreen = () => {
   console.log('data =>', data);
   const user = useSelector(state => state.user.data);
 
-  const KEY_ID = 'rzp_test_iJ36ueg9QGZdkY';
-  const SECRET_KEY = 'iFp3t7GbBbyrxz660CjPvnxe';
+
   const dispatch = useDispatch();
 
   const [cartItems, setCartItems] = useState([]);
@@ -76,31 +75,7 @@ const CartScreen = () => {
     }
   }, [cartItems]);
 
-  const handlePayment = () => {
-    var options = {
-      description: 'Full on Shopping',
-      image: 'https://i.imgur.com/3g7nmJC.png',
-      currency: 'INR',
-      key: KEY_ID, // Your api key
-      amount: totalRate * 100,
-      name: 'Buyer',
-      prefill: {
-        email: 'void@razorpay.com',
-        contact: '9191919191',
-        name: 'Razorpay Software',
-      },
-      theme: {color: Color.appDefaultColor},
-    };
-    RazorpayCheckout.open(options)
-      .then(data => {
-        // handle success
-        alert(`Success: ${data.razorpay_payment_id}`);
-      })
-      .catch(error => {
-        // handle failure
-        alert(`Error: ${error.code} | ${error.description}`);
-      });
-  };
+ 
   const handleCheckout = () => {
     dispatch(screen(Routes.CARTSUBMIT));
   };
