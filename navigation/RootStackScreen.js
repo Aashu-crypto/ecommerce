@@ -53,10 +53,18 @@ const CartStack = () => {
 const ProfileStack = () => {
   return (
     <Stack.Navigator
-      initialRouteName="Profile"
+      initialRouteName="Order"
       screenOptions={{
         headerShown: false,
       }}>
+          <Stack.Screen
+        name="Order"
+        component={MyOrders}
+        options={{
+          screenOptions: true,
+          title: '',
+        }}
+      />
       <Stack.Screen
         name="Profile"
         component={ProfileScreen}
@@ -70,14 +78,7 @@ const ProfileStack = () => {
           },
         }}
       />
-      <Stack.Screen
-        name="Order"
-        component={MyOrders}
-        options={{
-          screenOptions: true,
-          title: '',
-        }}
-      />
+    
     </Stack.Navigator>
   );
 };

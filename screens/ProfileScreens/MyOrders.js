@@ -7,15 +7,19 @@ import {
   Pressable,
   ScrollView,
 } from 'react-native';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Color, FontFamily, width} from '../../GlobalStyles';
 import {useSelector} from 'react-redux';
 import MyOrdersCart from '../../components/MyOrdersCart';
+import {backendHost} from '../../components/apiConfig';
 
 const MyOrders = () => {
   const myRef = useRef();
   const [indexTab, setIndex] = useState();
   const [focused, setFocused] = useState(0);
+  const user = useSelector(state => state.user.data);
+  const id = user.userId;
+  console.log('user Data', user);
   const data = [
     {
       id: 1,
@@ -34,8 +38,22 @@ const MyOrders = () => {
     },
   ];
   const reduxData = useSelector(state => state.product.cart);
-  const product = reduxData.flat();
-  console.log(reduxData);
+  const product = reduxData;
+
+  const [orderData, setOrderData] = useState();
+  useEffect(() => {
+    try {
+      const fetchData = async () => {
+        const response =await fetch(`${backendHost}/products/getOrderedItems/${id}`);
+        const json =await response.json();
+        console.log("res",json.orderedItems[0].item);
+        setOrderData(json);
+      };
+      fetchData();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   const renderItem = ({item, index}) => {
     const buttonColor = focused === index ? 'black' : '#F8F4EC';
