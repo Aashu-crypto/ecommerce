@@ -14,6 +14,7 @@ import ShopByCategory from '../screens/HomeScreens/ShopByCategory';
 import AllProductByCatergory from '../screens/HomeScreens/AllProductByCatergory';
 import Address from '../screens/PaymentScreens/Address';
 import AddAddress from '../screens/PaymentScreens/AddAddress';
+import ProductSearchScreen from '../screens/Search/ProductSearchScreen';
 
 const Stack = createStackNavigator();
 
@@ -35,6 +36,11 @@ const HomeStack = () => {
         name={Routes.PRODUCTBYCATEGORY}
         component={AllProductByCatergory}
         options={{headerShown: true}}
+      />
+      <Stack.Screen
+        name={Routes.SEARCH}
+        component={ProductSearchScreen}
+        options={{headerShown: false}}
       />
     </Stack.Navigator>
   );
@@ -58,6 +64,14 @@ const ProfileStack = () => {
         headerShown: false,
       }}>
       <Stack.Screen
+        name={Routes.MYORDERS}
+        component={MyOrders}
+        options={{
+          screenOptions: true,
+          title: '',
+        }}
+      />
+      <Stack.Screen
         name="Profile"
         component={ProfileScreen}
         options={{
@@ -68,14 +82,6 @@ const ProfileStack = () => {
             fontVariant: '700',
             color: Color.black,
           },
-        }}
-      />
-      <Stack.Screen
-        name={Routes.ORDERS}
-        component={MyOrders}
-        options={{
-          screenOptions: true,
-          title: '',
         }}
       />
     </Stack.Navigator>

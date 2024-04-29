@@ -11,13 +11,18 @@ import React, {useEffect, useRef, useState} from 'react';
 import {Color, FontFamily, width} from '../../GlobalStyles';
 import {useSelector} from 'react-redux';
 import MyOrdersCart from '../../components/MyOrdersCart';
-import { backendHost } from '../../components/apiConfig';
-
+import {backendHost} from '../../components/apiConfig';
+import {useFocusEffect} from '@react-navigation/native';
+import CartCard from '../../components/CartCard';
+import OrderCard from '../../components/OrderCard';
+import HeaderComponent from '../../components/HeaderComponent';
 const MyOrders = () => {
   const myRef = useRef();
   const [indexTab, setIndex] = useState();
   const [focused, setFocused] = useState(0);
   const user = useSelector(state => state.user.data);
+  const id = user.userId;
+  console.log('user Data', user);
   const data = [
     {
       id: 1,
@@ -35,61 +40,58 @@ const MyOrders = () => {
       ref: React.createRef(),
     },
   ];
-  useEffect(()=>{
-    fetch(`${backendHost}/products/getOrderedItems/`)
-  })
+  useEffect(() => {
+    fetch(`${backendHost}/products/getOrderedItems/`);
+  });
   const reduxData = useSelector(state => state.product.cart);
   const product = reduxData;
-  console.log(reduxData);
+
+  const [orderData, setOrderData] = useState();
+  useEffect(() => {
+    try {
+      const fetchData = async () => {
+        const response = await fetch(
+          `${backendHost}/products/getOrderedItems/${id}`,
+        );
+        const json = await response.json();
+        console.log('res', json.orderedItems[0].item);
+        setOrderData(json.orderedItems[0].item);
+      };
+      fetchData();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   const renderItem = ({item, index}) => {
     const buttonColor = focused === index ? 'black' : '#F8F4EC';
+    console.log('new item', item);
 
     return (
-      <Pressable
-        style={[styles.subHeader, {backgroundColor: buttonColor}]}
-        onPress={() => {
-          setFocused(index);
-          console.log(index);
-          setIndex(index + 1);
-        }}>
-        <Text
-          style={[
-            styles.subHeadertext,
-            {color: focused === index ? '#fff' : '#000'},
-          ]}>
-          {item.tabName}
-        </Text>
-      </Pressable>
+      <>
+        <OrderCard
+          key={item.productId.productId}
+          brandname={item.productId.name}
+          rate={item.productId.price}
+          status={item.status.toUpperCase()}
+          imageurl={item.productId.imageUrl}
+          quantity={item.productId.quantity}
+          productId={item.productId.productId}
+        />
+      </>
     );
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.header}>My Orders</Text>
+      <HeaderComponent title={'My Orders'} icon={'reorder'} />
       <View>
         <FlatList
-          data={data}
+          data={orderData}
           renderItem={renderItem}
-          horizontal
-          keyExtractor={item => item.id.toString()}
+          keyExtractor={item => item._id.toString()}
         />
       </View>
-      <ScrollView>
-        {product &&
-          product.length > 0 &&
-          product.map((item, index) => (
-            <View key={index}>
-              <MyOrdersCart
-                orderNumber={item.orderNumber}
-                trackingNumber={item.trackingNumber}
-                rate={item.discountedrate}
-                status={item.status}
-                index={indexTab}
-              />
-            </View>
-          ))}
-      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -100,7 +102,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    paddingHorizontal: 14,
+
     marginTop: 20,
   },
   header: {

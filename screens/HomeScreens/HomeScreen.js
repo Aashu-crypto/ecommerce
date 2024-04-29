@@ -8,6 +8,7 @@ import {
   StatusBar,
   ScrollView,
   FlatList,
+  SafeAreaView,
 } from 'react-native';
 import React, {useEffect, useState, useRef} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -19,6 +20,8 @@ import {Badge} from 'react-native-paper';
 import {backendHost} from '../../components/apiConfig';
 import useFetch from '../../customHooks/useFetch';
 import ShopByCategory from './ShopByCategory';
+import { SearchBar } from '@rneui/themed';
+import SearchInput from '../../components/SearchInput';
 const HomeScreen = () => {
   const dispatch = useDispatch();
   const reduxData = useSelector(state => state.product.data);
@@ -49,7 +52,7 @@ const HomeScreen = () => {
     );
   };
   return (
-    <>
+    <SafeAreaView style={{flex:1,paddingTop:20}}>
       <ScrollView style={styles.container}>
         <StatusBar translucent={true} backgroundColor="rgba(0, 0, 0, 0.5)" />
         <ImageBackground
@@ -59,7 +62,10 @@ const HomeScreen = () => {
             width: '100%',
             resizeMode: 'stretch',
           }}>
+            <SearchInput/>
+           
           <View style={{position: 'absolute', bottom: 15, left: 10}}>
+
             <Text
               style={{
                 fontSize: 48,
@@ -104,7 +110,7 @@ const HomeScreen = () => {
         />
         <ShopByCategory />
       </ScrollView>
-    </>
+    </SafeAreaView>
   );
 };
 

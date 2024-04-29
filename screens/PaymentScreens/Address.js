@@ -131,7 +131,7 @@ const Address = () => {
             </View>
           </View>
         </View>
-        <Pressable style={styles.deliver} onPress={handlePayment}>
+        <Pressable style={styles.deliver} onPress={successPayment}>
           <Text style={styles.deliverText}>Deliver to this Address</Text>
         </Pressable>
 

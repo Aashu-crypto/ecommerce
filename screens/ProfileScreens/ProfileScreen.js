@@ -76,7 +76,7 @@ const ProfileScreen = ({navigation}) => {
     {
       title: 'My orders',
       subTitle: 'Already have 12 orders',
-      route: Routes.ORDERS,
+      route: Routes.MYORDERS,
     },
     {title: 'Shipping Address', subTitle: '2 Addresses'},
     {title: 'Payment Method', subTitle: 'visa **32'},
