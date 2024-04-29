@@ -71,7 +71,7 @@ const ProfileStack = () => {
         }}
       />
       <Stack.Screen
-        name="Order"
+        name={Routes.ORDERS}
         component={MyOrders}
         options={{
           screenOptions: true,

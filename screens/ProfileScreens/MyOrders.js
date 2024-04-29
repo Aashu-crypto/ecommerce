@@ -7,15 +7,17 @@ import {
   Pressable,
   ScrollView,
 } from 'react-native';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Color, FontFamily, width} from '../../GlobalStyles';
 import {useSelector} from 'react-redux';
 import MyOrdersCart from '../../components/MyOrdersCart';
+import { backendHost } from '../../components/apiConfig';
 
 const MyOrders = () => {
   const myRef = useRef();
   const [indexTab, setIndex] = useState();
   const [focused, setFocused] = useState(0);
+  const user = useSelector(state => state.user.data);
   const data = [
     {
       id: 1,
@@ -33,8 +35,11 @@ const MyOrders = () => {
       ref: React.createRef(),
     },
   ];
+  useEffect(()=>{
+    fetch(`${backendHost}/products/getOrderedItems/`)
+  })
   const reduxData = useSelector(state => state.product.cart);
-  const product = reduxData.flat();
+  const product = reduxData;
   console.log(reduxData);
 
   const renderItem = ({item, index}) => {
@@ -96,6 +101,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     paddingHorizontal: 14,
+    marginTop: 20,
   },
   header: {
     fontSize: 34,

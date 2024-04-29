@@ -21,6 +21,7 @@ import MaleAvater from '../../assets/img/maleAvatar.svg';
 import Svg, {Circle, Polygon, Path, G} from 'react-native-svg';
 import HeaderComponent from '../../components/HeaderComponent';
 import {updateCart} from '../../redux/slice/CartSlice';
+import Routes from '../../Routes';
 const headerHeight = 280;
 const headerFinalHeight = 70;
 const imageSize = (headerHeight / 3) * 2;
@@ -72,7 +73,11 @@ const ProfileScreen = ({navigation}) => {
     dispatch(updateCart([]));
   };
   const profileOptionsData = [
-    {title: 'My orders', subTitle: 'Already have 12 orders"'},
+    {
+      title: 'My orders',
+      subTitle: 'Already have 12 orders',
+      route: Routes.ORDERS,
+    },
     {title: 'Shipping Address', subTitle: '2 Addresses'},
     {title: 'Payment Method', subTitle: 'visa **32'},
     {title: 'Promo Code', subTitle: 'You have special PromoCode'},
@@ -118,7 +123,12 @@ const ProfileScreen = ({navigation}) => {
         )}>
         <View>
           {profileOptionsData.map((option, index) => (
-            <TouchableOpacity key={index}>
+            <TouchableOpacity
+              key={index}
+              onPress={() => {
+                console.log(option.route);
+                navigation.navigate(option.route);
+              }}>
               <ProfileOptions title={option.title} subTitle={option.subTitle} />
             </TouchableOpacity>
           ))}

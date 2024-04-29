@@ -30,7 +30,7 @@ const Address = () => {
   const KEY_ID = 'rzp_test_iJ36ueg9QGZdkY';
   const SECRET_KEY = 'iFp3t7GbBbyrxz660CjPvnxe';
   const data = useSelector(state => state.cart.cart);
-console.log("Cart Data for order",data);
+  console.log('Cart Data for order', data);
   useEffect(() => {
     const fetchData = async () => {
       try {
