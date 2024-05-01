@@ -16,6 +16,7 @@ import Address from '../screens/PaymentScreens/Address';
 import AddAddress from '../screens/PaymentScreens/AddAddress';
 import ProductSearchScreen from '../screens/Search/ProductSearchScreen';
 import SearchResult from '../screens/Search/SearchResult';
+import ProductResult from '../screens/HomeScreens/ProductResult';
 
 const Stack = createStackNavigator();
 
@@ -42,6 +43,11 @@ const HomeStack = () => {
         name={Routes.SEARCH}
         component={ProductSearchScreen}
         options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name={Routes.PRODUCTRESULT}
+        component={ProductResult}
+       
       />
       <Stack.Screen name={Routes.SEARCHRESULT} component={SearchResult} />
     </Stack.Navigator>

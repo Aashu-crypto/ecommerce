@@ -30,7 +30,6 @@ const CartScreen = () => {
   console.log('data =>', data);
   const user = useSelector(state => state.user.data);
 
-
   const dispatch = useDispatch();
 
   const [cartItems, setCartItems] = useState([]);
@@ -75,7 +74,6 @@ const CartScreen = () => {
     }
   }, [cartItems]);
 
- 
   const handleCheckout = () => {
     dispatch(screen(Routes.CARTSUBMIT));
   };

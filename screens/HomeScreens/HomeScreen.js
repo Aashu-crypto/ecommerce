@@ -20,11 +20,14 @@ import {Badge} from 'react-native-paper';
 import {backendHost} from '../../components/apiConfig';
 import useFetch from '../../customHooks/useFetch';
 import ShopByCategory from './ShopByCategory';
-import { SearchBar } from '@rneui/themed';
+import {SearchBar} from '@rneui/themed';
 import SearchInput from '../../components/SearchInput';
+import {useNavigation} from '@react-navigation/native';
+import Routes from '../../Routes';
 const HomeScreen = () => {
   const dispatch = useDispatch();
   const reduxData = useSelector(state => state.product.data);
+  const navigation = useNavigation();
 
   const itemRefs = useRef([]);
   const {data, isLoading, error} = useFetch({url: '/products/details'});
@@ -52,7 +55,7 @@ const HomeScreen = () => {
     );
   };
   return (
-    <SafeAreaView style={{flex:1,paddingTop:20}}>
+    <SafeAreaView style={{flex: 1, paddingTop: 20}}>
       <ScrollView style={styles.container}>
         <StatusBar translucent={true} backgroundColor="rgba(0, 0, 0, 0.5)" />
         <ImageBackground
@@ -62,10 +65,9 @@ const HomeScreen = () => {
             width: '100%',
             resizeMode: 'stretch',
           }}>
-            <SearchInput/>
-           
-          <View style={{position: 'absolute', bottom: 15, left: 10}}>
+          <SearchInput />
 
+          <View style={{position: 'absolute', bottom: 15, left: 10}}>
             <Text
               style={{
                 fontSize: 48,
@@ -95,7 +97,13 @@ const HomeScreen = () => {
             <Text style={{fontSize: 30, fontWeight: '700', color: '#000'}}>
               New
             </Text>
-            <Text style={{fontSize: 12, color: '#000'}}>View All</Text>
+            <Text
+              style={{fontSize: 12, color: '#000'}}
+              onPress={() => {
+                navigation.navigate(Routes.PRODUCTRESULT);
+              }}>
+              View All
+            </Text>
           </View>
           <Text style={{}}>Never Seen Before!</Text>
         </View>
