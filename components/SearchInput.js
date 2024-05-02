@@ -22,7 +22,7 @@ const SearchInput = () => {
           onPress={() => {
             navigation.navigate(Routes.SEARCH);
           }}>
-          <Text style={styles.text}>Search Product</Text>
+          <Text style={styles.text}>Search Products here</Text>
         </Pressable>
       </View>
     </View>

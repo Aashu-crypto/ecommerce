@@ -1,3 +1,9 @@
+//build recently Viewed from frontend and backend
+//fix looking for according to gender
+//My oRder and Cart should open only when user is logged In
+//add product ID to featured
+//add for products
+//add gender and new or Early to modal of prdouct
 import {
   StyleSheet,
   Text,
@@ -9,6 +15,7 @@ import {
   ScrollView,
   FlatList,
   SafeAreaView,
+  Pressable,
 } from 'react-native';
 import React, {useEffect, useState, useRef} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -24,6 +31,12 @@ import {SearchBar} from '@rneui/themed';
 import SearchInput from '../../components/SearchInput';
 import {useNavigation} from '@react-navigation/native';
 import Routes from '../../Routes';
+import EarlyDeals from './EarlyDeals';
+import {Color, FontFamily, width} from '../../GlobalStyles';
+import Boy from '../../assets/img/boy.svg';
+import Girl from '../../assets/img/girl.svg';
+import Ads from '../../assets/img/Ads.svg';
+import FeaturedProduct from './FeaturedProduct';
 const HomeScreen = () => {
   const dispatch = useDispatch();
   const reduxData = useSelector(state => state.product.data);
@@ -55,9 +68,13 @@ const HomeScreen = () => {
     );
   };
   return (
-    <SafeAreaView style={{flex: 1, paddingTop: 20}}>
+    <SafeAreaView style={{flex: 1}}>
       <ScrollView style={styles.container}>
-        <StatusBar translucent={true} backgroundColor="rgba(0, 0, 0, 0.5)" />
+        <StatusBar
+          backgroundColor={Color.lightpurple}
+          barStyle={'dark-content'}
+        />
+
         <ImageBackground
           source={require('../../assets/img/MainScreenImage.jpg')}
           style={{
@@ -70,21 +87,31 @@ const HomeScreen = () => {
           <View style={{position: 'absolute', bottom: 15, left: 10}}>
             <Text
               style={{
-                fontSize: 48,
+                fontSize: 56,
                 color: '#fff',
                 fontFamily: 'Poppins-Bold',
                 fontWeight: '900',
               }}>
-              Digital
+              GenZ
             </Text>
             <Text
               style={{
-                fontSize: 48,
+                fontSize: 44,
                 color: '#fff',
                 fontFamily: 'Poppins-Bold',
                 fontWeight: '900',
               }}>
-              Sale
+              Express
+            </Text>
+            <Text
+              style={{
+                fontSize: 16,
+                color: '#fff',
+                fontFamily: 'Poppins-Bold',
+                fontWeight: '700',
+                letterSpacing: 2,
+              }}>
+              " Find Everything You want "
             </Text>
           </View>
         </ImageBackground>
@@ -117,6 +144,64 @@ const HomeScreen = () => {
           showsHorizontalScrollIndicator={false}
         />
         <ShopByCategory />
+        <Pressable
+          onPress={() => {
+            navigation.navigate(Routes.PRODUCTRESULT);
+          }}>
+          <Ads height={'190'} width={width} />
+        </Pressable>
+        <Text style={styles.title}>Early Deals</Text>
+        <EarlyDeals />
+        <Text style={styles.title}>Featured</Text>
+        <FeaturedProduct />
+        <View style={styles.looking}>
+          <Text style={styles.title}>Looking For?</Text>
+          <View style={styles.gender}>
+            <Pressable
+              onPress={() => {
+                navigation.navigate(Routes.PRODUCTRESULT);
+              }}>
+              <Boy height={'220'} width={width / 2} />
+            </Pressable>
+            <Pressable
+              onPress={() => {
+                navigation.navigate(Routes.PRODUCTRESULT);
+              }}>
+              <Girl height={'220'} width={width / 2} />
+            </Pressable>
+          </View>
+        </View>
+        <View>
+          <Text style={styles.title}>Recently Viewed</Text>
+          <FlatList
+            keyExtractor={(item, index) => index.toString()}
+            data={data}
+            renderItem={renderItem}
+            estimatedItemSize={100}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+          />
+        </View>
+
+        <View
+          style={{
+            width: '100%',
+            borderColor: '#e6f7ff',
+            alignItems: 'center',
+
+            justifyContent: 'center',
+            padding: 8,
+            borderRadius: 15,
+          }}>
+          <Text
+            style={[styles.disclaimer, {fontFamily: FontFamily.poppinsBold}]}>
+            Disclaimer:
+          </Text>
+          <Text style={styles.disclaimer}>
+            We reserve the right to correct or update information and to rectify
+            errors, inaccuracies, or omissions at any time without prior notice.
+          </Text>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -128,5 +213,32 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  gender: {
+    flexDirection: 'row',
+  },
+  image: {
+    width: width / 2,
+    height: 190,
+    resizeMode: 'stretch',
+    alignSelf: 'center',
+    marginVertical: 5,
+  },
+  looking: {
+    marginBottom: 10,
+  },
+
+  disclaimer: {
+    color: Color.appDefaultColor,
+    fontFamily: FontFamily.poppinsRegular,
+    fontSize: 9,
+  },
+  title: {
+    fontSize: 15,
+    fontWeight: '500',
+    letterSpacing: 2,
+    fontFamily: FontFamily.poppinsBold,
+    alignSelf: 'center',
+    marginVertical: 10,
   },
 });

@@ -78,7 +78,7 @@ const CartScreen = () => {
     dispatch(screen(Routes.CARTSUBMIT));
   };
   return (
-    <SafeAreaView style={{marginTop: 20, flex: 1, backgroundColor: '#fff'}}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff'}}>
       <HeaderComponent title="My Express Cart" icon="shopping-bag" />
       {data.length != 0 ? (
         <View style={{flex: 1}}>
