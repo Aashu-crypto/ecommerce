@@ -5,6 +5,7 @@ import {Color, FontFamily, height, width} from '../GlobalStyles';
 import {backendHost} from './apiConfig';
 import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
+import Routes from '../Routes';
 const ProductCard = ({
   brandname,
   gadgettype,
@@ -15,7 +16,7 @@ const ProductCard = ({
   status,
   quantity,
   productId,
-  description
+  description,
 }) => {
   const [quantityItem, setQuantity] = useState(quantity);
   const [price, setPrice] = useState(discountedrate);
@@ -27,18 +28,14 @@ const ProductCard = ({
   const navigation = useNavigation();
   return (
     <TouchableOpacity
-      activeOpacity={0.6}
+      activeOpacity={0.9}
       style={styles.container}
       onPress={() => {
-        navigation.navigate('Product', {
+        navigation.navigate(Routes.PRODUCT, {
           productId: productId,
           brandname: brandname,
-          gadgettype: gadgettype,
-          rate: rate,
-          discountedrate: discountedrate,
-          starrating: starrating,
-          imageurl: imageurl,
-          description: description,
+          title: gadgettype,
+        
         });
       }}>
       <View style={styles.card}>
@@ -59,7 +56,7 @@ const ProductCard = ({
                 flexDirection: 'row',
                 justifyContent: 'space-between',
               }}>
-              <Text style={styles.brandText}>hey {gadgettype}</Text>
+              <Text style={styles.brandText}>{gadgettype}</Text>
             </View>
           </View>
         </View>
@@ -78,7 +75,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     borderRadius: 10,
     backgroundColor: '#fff',
-    elevation: 5,
+    
   },
   brandText: {
     fontSize: 16,

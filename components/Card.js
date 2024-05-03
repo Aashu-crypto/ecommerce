@@ -3,6 +3,7 @@ import React from 'react';
 import StarRating from 'react-native-star-rating';
 import {Color, FontFamily} from '../GlobalStyles';
 import {useNavigation} from '@react-navigation/native';
+import Routes from '../Routes';
 const Card = ({
   productId,
   brandname,
@@ -20,16 +21,9 @@ const Card = ({
       activeOpacity={0.6}
       style={styles.container}
       onPress={() => {
-        navigation.navigate('Product', {
+        navigation.navigate(Routes.PRODUCT, {
           productId: productId,
-          brandname: brandname,
-          gadgettype: gadgettype,
-          rate: rate,
-          discountedrate: discountedrate,
-          starrating: starrating,
-          imageurl: imageurl,
-          description: description,
-          index: index,
+          title:gadgettype
         });
       }}>
       <Image source={{uri: imageurl}} style={styles.image} />

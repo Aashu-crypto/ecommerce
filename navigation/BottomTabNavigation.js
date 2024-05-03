@@ -12,14 +12,31 @@ import {CartStack} from './RootStackScreen';
 import {HomeStack} from './RootStackScreen';
 import {Badge} from 'react-native-paper';
 import {ProfileStack} from './RootStackScreen';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
+import Routes from '../Routes';
 const Tab = createBottomTabNavigator();
 
 export default function BottomTabNavigation() {
   return (
     <Tab.Navigator
       initialRouteName="HomeStack"
-      screenOptions={{
-        headerShown: false,
+      screenOptions={({route, navigation}) => {
+        return {
+          headerShown: false,
+
+          tabBarStyle: {
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: Platform.OS === 'android' ? 60 : 80,
+
+            display:
+              getFocusedRouteNameFromRoute(route) === Routes.SEARCH
+                ? 'none'
+                : 'flex',
+          },
+          tabBarInactiveTintColor: 'grey',
+          tabBarActiveBackgroundColor: 'aliceblue',
+        };
       }}>
       <Tab.Screen
         name="HomeStack"

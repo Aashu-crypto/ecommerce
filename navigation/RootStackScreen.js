@@ -28,7 +28,7 @@ const HomeStack = () => {
         component={HomeScreen}
         options={{headerShown: false}}
       />
-      <Stack.Screen name="Product" component={ProductScreen} />
+      <Stack.Screen name={Routes.PRODUCT} component={ProductScreen} />
       <Stack.Screen
         name="Cart"
         component={CartScreen}
@@ -44,12 +44,8 @@ const HomeStack = () => {
         component={ProductSearchScreen}
         options={{headerShown: false}}
       />
-      <Stack.Screen
-        name={Routes.PRODUCTRESULT}
-        component={ProductResult}
-       
-      />
-      <Stack.Screen name={Routes.SEARCHRESULT} component={SearchResult} />
+      <Stack.Screen name={Routes.PRODUCTRESULT} component={ProductResult}  options={{headerShown: false}} />
+      <Stack.Screen name={Routes.SEARCHRESULT} component={SearchResult}  options={{headerShown: false}} />
     </Stack.Navigator>
   );
 };
@@ -136,7 +132,7 @@ const Navigator = () => {
   switch (navigation) {
     case Routes.MAIN:
       return <BottomTabNavigation />;
-    case 'USER':
+    case Routes.SIGNUP:
       return <UserProfileStack />;
     case Routes.CARTSUBMIT:
       return <PaymentStack />;

@@ -20,7 +20,9 @@ import {useNavigation} from '@react-navigation/native';
 import {updateCart} from '../../redux/slice/CartSlice';
 import {backendHost} from '../../components/apiConfig';
 import {width, height} from '../../GlobalStyles';
-
+import Routes from '../../Routes';
+import {ActivityIndicator} from 'react-native-paper';
+import ContentLoader from '../../components/ContentLoader';
 export default ProductScreen = ({route}) => {
   const {
     productId,
@@ -32,6 +34,7 @@ export default ProductScreen = ({route}) => {
     imageurl,
     description,
     index,
+    title,
   } = route.params;
   const image = 'https://picsum.photos/275/413';
   const [isClicked, setIsClicked] = useState(false);
@@ -64,7 +67,25 @@ export default ProductScreen = ({route}) => {
     outputRange: scaleOutputRange,
   });
 
+  useEffect(() => {
+    // Dynamically set the title based on the current article
+    // Replace with your dynamic title logic
+    navigation.setOptions({
+      title: title,
+    });
+  }, [productData]);
   const handleAddToCart = async () => {
+    console.log(user);
+    if (user.length == 0) {
+      Alert.alert('Please Log in', 'To add product user should be logged in', [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {text: 'Login', onPress: () => dispatch(screen(Routes.SIGNUP))},
+      ]);
+    }
     const body = {
       userId: user.userId,
       productId: productId,
@@ -79,6 +100,21 @@ export default ProductScreen = ({route}) => {
         body: JSON.stringify(body),
       });
       const json = await res.json();
+      Alert.alert('Added to Cart', 'Product has been added.', [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'Cart',
+          onPress: () => {
+            navigation.navigate('CartStack');
+          },
+        },
+        {text: 'CheckOut', onPress: () => dispatch(screen(Routes.CARTSUBMIT))},
+      ]);
+
       console.log(json);
     } catch (error) {
       Alert.alert('Error');
@@ -89,130 +125,184 @@ export default ProductScreen = ({route}) => {
   useEffect(() => {
     console.log('main', mainScrollValue.value);
   }, [mainScrollValue]);
+  const [productData, setProduct] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+
+      try {
+        const response = await fetch(
+          `${backendHost}/products/getProduct/${productId}`,
+        );
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const res = await response.json();
+        setProduct(res);
+        console.log('data of product', res);
+      } catch (error) {
+        console.log(error);
+        // ... (Improved error handling as mentioned above)
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
   return (
     <>
-      <ScrollView style={styles.container}>
-        <View>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            decelerationRate="fast"
-            pagingEnabled
-            onScroll={Animated.event(
-              [{nativeEvent: {contentOffset: {x: scrollValue}}}],
-              {useNativeDriver: false},
-            )}>
-            {data.map(item => (
-              <Image source={{uri: item.url}} style={styles.image} />
-            ))}
-          </ScrollView>
-          <View style={styles.indicatorConatiner} pointerEvents="none">
-            {data.map(item => (
-              <Indicator />
-            ))}
-            <Animated.View
-              style={[
-                styles.activeIndicator,
-                {
-                  position: 'absolute',
-                  transform: [{translateX}, {scaleX}],
-                },
-              ]}
-            />
-          </View>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-evenly',
-            marginVertical: 12,
-          }}>
-          <Pressable
-            style={styles.selectBtn}
-            onPress={() => {
-              setBtnClicked(1), refRBSheet.current.open();
-            }}>
-            <Text style={styles.selectBtnText}>Size : {selectedSize}</Text>
-            <Icon name="arrow-down" size={15} style={styles.selectBtnText} />
-          </Pressable>
-
-          <Pressable
-            style={styles.selectBtn}
-            onPress={() => {
-              setBtnClicked(2), refRBSheet.current.open();
-            }}>
-            <Text style={styles.selectBtnText}>Color : {selectedColor}</Text>
-            <Icon name="arrow-down" size={15} style={styles.selectBtnText} />
-          </Pressable>
-          <Pressable style={styles.selectBtnFav}>
-            <Icon name="heart" size={15} style={styles.selectBtnText} />
-          </Pressable>
-        </View>
-        <View style={{padding: 5}}>
-          <View
-            style={{
-              justifyContent: 'space-between',
-              flexDirection: 'row',
-            }}>
-            <Text style={styles.brandname}>{brandname}</Text>
-            <Text style={styles.brandname}> Rs {discountedrate}</Text>
-          </View>
-          <Text style={styles.gadgettype}>{gadgettype}</Text>
-
-          <View style={{width: 50, marginVertical: 5}}>
-            <StarRating
-              starSize={15}
-              disabled={false}
-              maxStars={5}
-              rating={starrating}
-              emptyStarColor={'#FFBA49'}
-              fullStarColor={'#FFBA49'}
-            />
-          </View>
-          <Text style={styles.description}>{description}</Text>
-        </View>
-
-        <RBSheet
-          ref={refRBSheet}
-          closeOnDragDown={true}
-          closeOnPressMask={false}
-          animationType="fade"
-          customStyles={{
-            wrapper: {
-              backgroundColor: 'transparent',
-            },
-            draggableIcon: {
-              backgroundColor: '#000',
-            },
-          }}>
-          <Text style={styles.bottomSheetTitle}>
-            {btnClicked == 1 ? 'Select Size' : 'Select Color'}
-          </Text>
-          <View style={styles.bottomSheet}>
-            {(btnClicked == 1 ? size : color).map(item => (
-              <TouchableOpacity
-                style={styles.bottomSheetBtn}
+      {!isLoading ? (
+        <View style={{flex: 1, backgroundColor: '#fff'}}>
+          <ScrollView style={styles.container}>
+            <View>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                decelerationRate="fast"
+                pagingEnabled
+                onScroll={Animated.event(
+                  [{nativeEvent: {contentOffset: {x: scrollValue}}}],
+                  {useNativeDriver: false},
+                )}>
+                {data.map(item => (
+                  <Image
+                    source={{
+                      uri: productData.imageUrl ? productData.imageUrl : '',
+                    }}
+                    style={styles.image}
+                  />
+                ))}
+              </ScrollView>
+              <View style={styles.indicatorConatiner} pointerEvents="none">
+                {data.map(item => (
+                  <Indicator />
+                ))}
+                <Animated.View
+                  style={[
+                    styles.activeIndicator,
+                    {
+                      position: 'absolute',
+                      transform: [{translateX}, {scaleX}],
+                    },
+                  ]}
+                />
+              </View>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-evenly',
+                marginVertical: 12,
+              }}>
+              <Pressable
+                style={styles.selectBtn}
                 onPress={() => {
-                  {
-                    btnClicked == 1
-                      ? setSelectedSize(item)
-                      : setSelectedColor(item);
-                  }
-                  refRBSheet.current.close();
+                  setBtnClicked(1), refRBSheet.current.open();
                 }}>
-                <Text style={styles.bottomSheetBtnText}>{item}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </RBSheet>
-      </ScrollView>
-      <TouchableOpacity
-        style={styles.addToCart}
-        onPress={() => {
-          handleAddToCart();
-        }}>
-        <Text style={styles.addToCartText}>Add to Cart</Text>
-      </TouchableOpacity>
+                <Text style={styles.selectBtnText}>Size : {selectedSize}</Text>
+                <Icon
+                  name="arrow-down"
+                  size={15}
+                  style={styles.selectBtnText}
+                />
+              </Pressable>
+
+              <Pressable
+                style={styles.selectBtn}
+                onPress={() => {
+                  setBtnClicked(2), refRBSheet.current.open();
+                }}>
+                <Text style={styles.selectBtnText}>
+                  Color : {selectedColor}
+                </Text>
+                <Icon
+                  name="arrow-down"
+                  size={15}
+                  style={styles.selectBtnText}
+                />
+              </Pressable>
+              <Pressable style={styles.selectBtnFav}>
+                <Icon name="heart" size={10} style={styles.selectBtnText} />
+              </Pressable>
+            </View>
+            <View style={{padding: 5}}>
+              <View
+                style={{
+                  justifyContent: 'space-between',
+                  flexDirection: 'row',
+                }}>
+                <Text style={styles.brandname}>{productData?.brandName}</Text>
+                <Text style={styles.brandname}> Rs {productData?.price}</Text>
+              </View>
+              <Text style={styles.gadgettype}>{productData?.name}</Text>
+
+              <View style={{width: 50, marginVertical: 5}}>
+                <StarRating
+                  starSize={15}
+                  disabled={false}
+                  maxStars={5}
+                  rating={productData?.starrating}
+                  emptyStarColor={'#FFBA49'}
+                  fullStarColor={'#FFBA49'}
+                />
+              </View>
+              <Text
+                style={{
+                  color: Color.black,
+                  fontFamily: FontFamily.poppinsBold,
+                }}>
+                About Product:
+              </Text>
+              <Text style={styles.description}>{productData?.description}</Text>
+            </View>
+
+            <RBSheet
+              ref={refRBSheet}
+              closeOnDragDown={true}
+              closeOnPressMask={false}
+              animationType="fade"
+              customStyles={{
+                wrapper: {
+                  backgroundColor: 'transparent',
+                },
+                draggableIcon: {
+                  backgroundColor: '#000',
+                },
+              }}>
+              <Text style={styles.bottomSheetTitle}>
+                {btnClicked == 1 ? 'Select Size' : 'Select Color'}
+              </Text>
+              <View style={styles.bottomSheet}>
+                {(btnClicked == 1 ? size : color).map(item => (
+                  <TouchableOpacity
+                    style={styles.bottomSheetBtn}
+                    onPress={() => {
+                      {
+                        btnClicked == 1
+                          ? setSelectedSize(item)
+                          : setSelectedColor(item);
+                      }
+                      refRBSheet.current.close();
+                    }}>
+                    <Text style={styles.bottomSheetBtnText}>{item}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </RBSheet>
+          </ScrollView>
+          <TouchableOpacity
+            style={styles.addToCart}
+            onPress={() => {
+              handleAddToCart();
+            }}>
+            <Text style={styles.addToCartText}>Add to Cart</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+      <ContentLoader/>
+      )}
     </>
   );
 };
@@ -247,7 +337,7 @@ const styles = StyleSheet.create({
   },
   selectBtnFav: {
     borderWidth: 0.5,
-    borderRadius: 30,
+    borderRadius: 45,
     alignSelf: 'center',
   },
   selectBtnText: {
@@ -308,13 +398,14 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.poppinsRegular,
   },
   description: {
-    fontFamily: 14,
-    lineHeight: 21,
+    fontSize: 14,
+    lineHeight: 25,
     fontWeight: '400',
     fontFamily: FontFamily.poppinsRegular,
     color: Color.black,
     marginVertical: 8,
-    width: '95%',
+    width: '90%',
+    alignSelf: 'center',
   },
   addToCart: {
     backgroundColor: Color.appDefaultColor,
@@ -325,8 +416,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 25,
     margin: 5,
-    position: 'absolute',
-    bottom: 0,
   },
   addToCartText: {
     fontSize: 16,

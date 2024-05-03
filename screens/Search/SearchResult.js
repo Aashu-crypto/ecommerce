@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {backendHost} from '../../components/apiConfig';
 import {FlashList} from '@shopify/flash-list';
 import ProductCard from '../../components/ProductCard';
+import HeaderComponent from '../../components/HeaderComponent';
 
 const SearchResult = ({route}) => {
   const text = route.params.text;
@@ -42,6 +43,7 @@ const SearchResult = ({route}) => {
   };
   return (
     <View>
+      <HeaderComponent title={"Products Found"}/>
       <FlatList data={product} renderItem={renderItem} />
     </View>
   );

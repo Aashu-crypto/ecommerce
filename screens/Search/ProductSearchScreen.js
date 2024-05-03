@@ -13,6 +13,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/native';
 import {backendHost} from '../../components/apiConfig';
 import Routes from '../../Routes';
+import Icon from 'react-native-vector-icons/Ionicons';
 const ProductSearchScreen = () => {
   const navigation = useNavigation();
 
@@ -46,8 +47,9 @@ const ProductSearchScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.textInputView}>
+      <Icon name="search" size={20} color={Color.appDefaultColor}/>
         <TextInput
-          placeholder="Search"
+          placeholder="Search for products"
           value={searchTerm}
           onChangeText={setSearchTerm}
           style={styles.textInput}
@@ -58,7 +60,7 @@ const ProductSearchScreen = () => {
       </View>
       <FlatList
         data={searchResults}
-        keyExtractor={item => item._id} // Assuming _id in your product data
+        keyExtractor={item => item.id} // Assuming _id in your product data
         renderItem={({item}) => (
           <View style={styles.itemView}>
             <Text style={styles.itemText}>{item.name}</Text>
@@ -74,17 +76,16 @@ export default ProductSearchScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 20,
-    paddingTop: 10,
+ 
   },
   textInput: {
     backgroundColor: Color.lightpurple,
-    padding: 5,
+    
 
     borderColor: Color.gray, // Adjust color as desired
     borderRadius: 5, // Soften the edges
 
-    height: 60,
+    height: 50,
     width: '90%',
   },
   textInputView: {
@@ -92,14 +93,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Color.lightpurple,
-    borderWidth: 2,
+    borderWidth: 1,
 
     shadowColor: '#000', // Example shadow (optional)
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,
     shadowRadius: 3,
-    borderRadius: 10,
+    borderRadius: 35,
     borderColor: Color.appDefaultColor,
+    width:"95%",
+    alignSelf:'center',
+    marginTop:5
   },
   clearButton: {
     padding: 15,

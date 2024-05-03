@@ -37,14 +37,36 @@ import Boy from '../../assets/img/boy.svg';
 import Girl from '../../assets/img/girl.svg';
 import Ads from '../../assets/img/Ads.svg';
 import FeaturedProduct from './FeaturedProduct';
+import ContentLoader from '../../components/ContentLoader';
 const HomeScreen = () => {
   const dispatch = useDispatch();
   const reduxData = useSelector(state => state.product.data);
   const navigation = useNavigation();
-
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [data, setData] = useState();
   const itemRefs = useRef([]);
-  const {data, isLoading, error} = useFetch({url: '/products/details'});
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoaded(true);
 
+      try {
+        const response = await fetch(`${backendHost}/products/details`, {});
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const res = await response.json();
+        setData(res.products);
+        console.log('data', data);
+      } catch (error) {
+        // ... (Improved error handling as mentioned above)
+        console.error(error);
+      } finally {
+        setIsLoaded(false);
+      }
+    };
+    fetchData();
+  }, []);
   useEffect(() => {
     dispatch(product(data));
     console.log('Product data added to  redux baby');
@@ -69,12 +91,11 @@ const HomeScreen = () => {
   };
   return (
     <SafeAreaView style={{flex: 1}}>
-      <ScrollView style={styles.container}>
-        <StatusBar
-          backgroundColor={Color.lightpurple}
-          barStyle={'dark-content'}
-        />
-
+      <StatusBar
+        backgroundColor={Color.lightpurple}
+        barStyle={'dark-content'}
+      />
+      {!isLoaded?<ScrollView style={styles.container}>
         <ImageBackground
           source={require('../../assets/img/MainScreenImage.jpg')}
           style={{
@@ -136,7 +157,7 @@ const HomeScreen = () => {
         </View>
 
         <FlatList
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={item => item._id}
           data={data}
           renderItem={renderItem}
           estimatedItemSize={100}
@@ -146,7 +167,9 @@ const HomeScreen = () => {
         <ShopByCategory />
         <Pressable
           onPress={() => {
-            navigation.navigate(Routes.PRODUCTRESULT);
+            navigation.navigate(Routes.PRODUCT, {
+              productId: '66348ad5602598c5900e138c',
+            });
           }}>
           <Ads height={'190'} width={width} />
         </Pressable>
@@ -202,7 +225,8 @@ const HomeScreen = () => {
             errors, inaccuracies, or omissions at any time without prior notice.
           </Text>
         </View>
-      </ScrollView>
+      </ScrollView>:<ContentLoader/>}
+      
     </SafeAreaView>
   );
 };

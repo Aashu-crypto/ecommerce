@@ -5,19 +5,29 @@ import {
   StyleSheet,
   Text,
   View,
+  TouchableOpacity,
 } from 'react-native';
 import React from 'react';
 import {FontFamily, width} from '../../GlobalStyles';
-const shopNow = () => {
+import {useNavigation} from '@react-navigation/native';
+
+const shopNow = id => {
+  const navigation = useNavigation();
   return (
-    <Pressable>
+    <Pressable
+      onPress={() => {
+        console.log('id', id);
+        navigation.navigate(Routes.PRODUCT, {
+          productId: id,
+        });
+      }}>
       <Text style={styles.shopNow}>Shop Now</Text>
     </Pressable>
   );
 };
 const FeaturedProduct = () => {
   return (
-    <View style={{backgroundColor:'black'}}>
+    <View style={{backgroundColor: 'black'}}>
       <View style={{flexDirection: 'row'}}>
         <ImageBackground
           style={styles.image}
@@ -27,7 +37,7 @@ const FeaturedProduct = () => {
             <Text style={styles.productSubTitle}>
               Black and white version is back
             </Text>
-            {shopNow()}
+            {shopNow((id = '6634903b602598c5900e1488'))}
           </View>
         </ImageBackground>
         <ImageBackground
@@ -38,7 +48,7 @@ const FeaturedProduct = () => {
             <Text style={styles.productSubTitle}>
               Featured Hat that gives you another vibe
             </Text>
-            {shopNow()}
+            {shopNow((id = '66349275602598c5900e1493'))}
           </View>
         </ImageBackground>
       </View>
@@ -50,7 +60,7 @@ const FeaturedProduct = () => {
           <View style={styles.textView}>
             <Text style={styles.productTitle}> Speakers</Text>
             <Text style={styles.productSubTitle}>Amazon Wireless Speakers</Text>
-            {shopNow()}
+            {shopNow((id = '66349174602598c5900e148d'))}
           </View>
         </ImageBackground>
         <ImageBackground
@@ -59,7 +69,7 @@ const FeaturedProduct = () => {
           <View style={styles.textView}>
             <Text style={styles.productTitle}>Perfume</Text>
             <Text style={styles.productSubTitle}>Gucci intense OUD EDP</Text>
-            {shopNow()}
+            {shopNow((id = '663491ec602598c5900e1491'))}
           </View>
         </ImageBackground>
       </View>
