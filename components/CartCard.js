@@ -149,7 +149,7 @@ const CartCard = ({
             </View>
             <View>
               <Text
-                style={{textAlign: 'right', ellipsizeMode: 'tail', width: 130}}>
+                style={{textAlign: 'right', width: 130}}>
                 Rs {discountedrate} * {quantityItem} =Rs {totalCost}
               </Text>
             </View>

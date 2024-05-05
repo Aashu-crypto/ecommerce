@@ -5,6 +5,7 @@ import {
   View,
   TextInput,
   Alert,
+  ScrollView
 } from 'react-native';
 import React, {useState} from 'react';
 import {Color, FontFamily} from '../../GlobalStyles';
@@ -51,7 +52,7 @@ const SignIn = () => {
   };
   const navigation = useNavigation();
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Pressable
         style={styles.goBack}
         onPress={() => {
@@ -62,7 +63,7 @@ const SignIn = () => {
       </Pressable>
       <View style={styles.upperView}>
         <LoginSvg height="120" width="150" />
-        <Text style={styles.title}>Create Your Account</Text>
+        <Text style={styles.title}>Login your account</Text>
       </View>
       <View style={{flex: 1, justifyContent: 'center', alignItem: 'center'}}>
         <View style={styles.containerText}>
@@ -70,8 +71,8 @@ const SignIn = () => {
             style={styles.textinput}
             placeholder={'Email'}
             keyboardType="email-address"
-            placeholderTextColor={Color.gray}
-            onChangeText={i => {
+            placeholderTextColor={Color.gray}            onChangeText={i => {
+
               setMail(i);
             }}
           />
@@ -91,7 +92,12 @@ const SignIn = () => {
         </View>
         <Pressable>
           <Text
-            style={{textAlign: 'right', marginRight: 15}}
+             style={{
+              textAlign: 'right',
+              marginRight: 15,
+              textDecorationLine: 'underline',
+              color: Color.colorDarkslategray,
+            }}
             onPress={() => {
               navigation.navigate('SignIn');
             }}>
@@ -125,7 +131,7 @@ const SignIn = () => {
           </Text>
         </Pressable>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -143,20 +149,21 @@ const styles = StyleSheet.create({
   upperView: {
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 20,
+  marginVertical:20,
+  gap:15
   },
   title: {
-    fontSize: 34,
-    fontWeight: '700',
+    fontSize: 25,
+    fontWeight: '600',
     fontFamily: FontFamily.poppinsBold,
     color: Color.black,
   },
   textinput: {
-    padding: 10,
-    height: 64,
+    padding: 15,
+    height: 50,
     backgroundColor: Color.lightpurple,
     borderRadius: 25,
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: Color.appDefaultColor,
   },
   containerText: {

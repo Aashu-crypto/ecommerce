@@ -109,6 +109,7 @@ const UserProfileStack = () => {
         options={{
           screenOptions: true,
           title: '',
+          headerShown:false
         }}
       />
     </Stack.Navigator>

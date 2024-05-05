@@ -37,24 +37,27 @@ const CartScreen = () => {
     React.useCallback(() => {
       console.log('useEffeevt');
       const fetchData = async () => {
-        console.log(user.userId);
-        try {
-          const response = await fetch(
-            `${backendHost}/products/cartItems/${user.userId}`,
-          );
+        console.log(user);
+        if (Object.keys(user).length != 0) {
+          console.log('user', user);
+          try {
+            const response = await fetch(
+              `${backendHost}/products/cartItems/${user.userId}`,
+            );
 
-          const json = await response.json();
-          if (json.message == 'Cart is Empty') {
-            console.log('cart');
-            setCartItems([]);
-          } else {
-            setCartItems(json[0].item);
-            console.log('json', json[0]);
-            dispatch(updateCart(json[0].item));
+            const json = await response.json();
+            if (json.message == 'Cart is Empty') {
+              console.log('cart');
+              setCartItems([]);
+            } else {
+              setCartItems(json[0].item);
+              console.log('json', json[0]);
+              dispatch(updateCart(json[0].item));
+            }
+          } catch (error) {
+            Alert.alert('Some error Occured');
+            console.log(error);
           }
-        } catch (error) {
-          Alert.alert('Some error Occured');
-          console.log(error);
         }
       };
       fetchData();
@@ -75,10 +78,23 @@ const CartScreen = () => {
   }, [cartItems]);
 
   const handleCheckout = () => {
-    dispatch(screen(Routes.CARTSUBMIT));
+    if (Object.keys(user).length != 0) {
+      dispatch(screen(Routes.CARTSUBMIT));
+    } else {
+      Alert.alert(
+        'User should sign in to checkout',
+        'Move to Login ?',
+       [ {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {text: 'OK', onPress: () => console.log(dispatch(screen(Routes.SIGNUP)))}],
+      );
+    }
   };
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff'}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
       <HeaderComponent title="My Express Cart" icon="shopping-bag" />
       {data.length != 0 ? (
         <View style={{flex: 1}}>
@@ -153,7 +169,13 @@ const CartScreen = () => {
         </View>
       ) : (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={styles.emptyCart}>Cart is empty</Text>
+          {user.length == 0 ? (
+            <Pressable>
+              <Text>Login to see Your Cart</Text>{' '}
+            </Pressable>
+          ) : (
+            <Text style={styles.emptyCart}>Cart is empty</Text>
+          )}
         </View>
       )}
     </SafeAreaView>

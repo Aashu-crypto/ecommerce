@@ -69,8 +69,9 @@ const ProfileScreen = ({navigation}) => {
 
   const dispatch = useDispatch();
   const handleLogOut = () => {
-    dispatch(setUser({}));
     dispatch(updateCart([]));
+    dispatch(setUser({}));
+    
   };
   const profileOptionsData = [
     {
@@ -137,7 +138,7 @@ const ProfileScreen = ({navigation}) => {
           onPress={() => {
             console.log('kwn', user);
             if (Object.keys(user).length == 0) {
-              dispatch(screen('USER'));
+              dispatch(screen(Routes.SIGNUP));
             } else {
               Alert.alert('Logout', 'Are you Sure You want to logOut', [
                 {

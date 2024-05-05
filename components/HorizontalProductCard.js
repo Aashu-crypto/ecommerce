@@ -12,6 +12,7 @@ import {Color, FontFamily, height, width} from '../GlobalStyles';
 import {backendHost} from './apiConfig';
 import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
+import Routes from '../Routes';
 const ProductHorizontalCard = ({
   brandname,
   gadgettype,
@@ -37,7 +38,7 @@ const ProductHorizontalCard = ({
       style={styles.card}
       activeOpacity={0.7}
       onPress={() => {
-        navigation.navigate('Product', {
+        navigation.navigate(Routes.PRODUCT, {
           productId: productId,
           brandname: brandname,
           gadgettype: gadgettype,

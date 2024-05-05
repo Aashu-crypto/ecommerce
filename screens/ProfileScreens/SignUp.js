@@ -23,6 +23,8 @@ import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import LoginSvg from '../../assets/img/loginSvg.svg';
 import useFetch from '../../customHooks/useFetch';
 import {backendHost} from '../../components/apiConfig';
+import {ScrollView} from 'react-native-gesture-handler';
+import Routes from '../../Routes';
 const SignUp = ({navigation}) => {
   const [mail, setMail] = useState();
   const [password, setPassword] = useState();
@@ -76,7 +78,7 @@ const SignUp = ({navigation}) => {
       setRes(json);
 
       if (json.message === 'User Created Successfully') {
-        Alert.alert('Done');
+        dispatch(screen(Routes.MAIN))
       } else {
         // Handle potential errors from the backend (e.g., display json.error)
       }
@@ -87,12 +89,12 @@ const SignUp = ({navigation}) => {
     }
   };
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <Pressable
         style={styles.goBack}
         onPress={() => {
           console.log('Pressed');
-          dispatch(screen('MAIN'));
+          dispatch(screen(Routes.MAIN));
         }}>
         <Icon name="close" color={Color.appDefaultColor} size={30} />
       </Pressable>
@@ -102,6 +104,15 @@ const SignUp = ({navigation}) => {
       </View>
       <View style={styles.lowerView}>
         <View style={styles.containerText}>
+          <TextInput
+            style={styles.textinput}
+            placeholder={'enter your name'}
+            keyboardType="default"
+            placeholderTextColor={Color.gray}
+            onChangeText={i => {
+              setName(i);
+            }}
+          />
           <TextInput
             style={styles.textinput}
             placeholder={'enter your email'}
@@ -122,15 +133,6 @@ const SignUp = ({navigation}) => {
               setPassword(i);
             }}
           />
-          <TextInput
-            style={styles.textinput}
-            placeholder={'enter your name'}
-            keyboardType="default"
-            placeholderTextColor={Color.gray}
-            onChangeText={i => {
-              setName(i);
-            }}
-          />
         </View>
         <Pressable>
           <Text
@@ -138,6 +140,7 @@ const SignUp = ({navigation}) => {
               textAlign: 'right',
               marginRight: 15,
               textDecorationLine: 'underline',
+              color: Color.colorDarkslategray,
             }}
             onPress={() => {
               navigation.navigate('SignIn');
@@ -169,7 +172,7 @@ const SignUp = ({navigation}) => {
               fontFamily: FontFamily.poppinsRegular,
               letterSpacing: 10,
             }}>
-            Sign Up
+            Create Account
           </Text>
         </Pressable>
 
@@ -182,7 +185,7 @@ const SignUp = ({navigation}) => {
           }}
         />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -201,7 +204,7 @@ const styles = StyleSheet.create({
   upperView: {
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 20,
+    gap:15,
   },
   title: {
     fontSize: 24,
@@ -216,12 +219,13 @@ const styles = StyleSheet.create({
     gap: 15,
   },
   textinput: {
-    padding: 10,
-    height: 64,
+    padding: 15,
+    height: 50,
     backgroundColor: Color.lightpurple,
-    borderRadius: 25,
-    borderWidth: 1,
+    borderRadius: 28,
+    borderWidth: 0.5,
     borderColor: Color.appDefaultColor,
+   
   },
   containerText: {
     margin: 5,
