@@ -85,40 +85,44 @@ export default ProductScreen = ({route}) => {
         },
         {text: 'Login', onPress: () => dispatch(screen(Routes.SIGNUP))},
       ]);
-    }
-    const body = {
-      userId: user.userId,
-      productId: productId,
-      quantity: 1,
-    };
-    try {
-      const res = await fetch(`${backendHost}/products/addCart`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-      });
-      const json = await res.json();
-      Alert.alert('Added to Cart', 'Product has been added.', [
-        {
-          text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
-        },
-        {
-          text: 'Cart',
-          onPress: () => {
-            navigation.navigate('CartStack');
+    } else {
+      const body = {
+        userId: user.userId,
+        productId: productId,
+        quantity: 1,
+      };
+      try {
+        const res = await fetch(`${backendHost}/products/addCart`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
           },
-        },
-        {text: 'CheckOut', onPress: () => dispatch(screen(Routes.CARTSUBMIT))},
-      ]);
+          body: JSON.stringify(body),
+        });
+        const json = await res.json();
+        Alert.alert('Added to Cart', 'Product has been added.', [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {
+            text: 'Cart',
+            onPress: () => {
+              navigation.navigate('CartStack');
+            },
+          },
+          {
+            text: 'CheckOut',
+            onPress: () => dispatch(screen(Routes.CARTSUBMIT)),
+          },
+        ]);
 
-      console.log(json);
-    } catch (error) {
-      Alert.alert('Error');
-      console.log(error);
+        console.log(json);
+      } catch (error) {
+        Alert.alert('Error');
+        console.log(error);
+      }
     }
   };
 
@@ -155,7 +159,9 @@ export default ProductScreen = ({route}) => {
     <>
       {!isLoading ? (
         <View style={{flex: 1, backgroundColor: '#fff'}}>
-          <ScrollView style={styles.container}>
+          <ScrollView
+            style={styles.container}
+            showsVerticalScrollIndicator={false}>
             <View>
               <ScrollView
                 horizontal
@@ -166,8 +172,9 @@ export default ProductScreen = ({route}) => {
                   [{nativeEvent: {contentOffset: {x: scrollValue}}}],
                   {useNativeDriver: false},
                 )}>
-                {data.map(item => (
+                {data.map((item, index) => (
                   <Image
+                    key={index}
                     source={{
                       uri: productData.imageUrl ? productData.imageUrl : '',
                     }}
@@ -176,8 +183,8 @@ export default ProductScreen = ({route}) => {
                 ))}
               </ScrollView>
               <View style={styles.indicatorConatiner} pointerEvents="none">
-                {data.map(item => (
-                  <Indicator />
+                {data.map((item, index) => (
+                  <Indicator key={index} />
                 ))}
                 <Animated.View
                   style={[
@@ -234,7 +241,10 @@ export default ProductScreen = ({route}) => {
                   flexDirection: 'row',
                 }}>
                 <Text style={styles.brandname}>{productData?.brandName}</Text>
-                <Text style={styles.brandname}> Rs {productData?.price}</Text>
+                <Text style={styles.rate}>
+                  {' '}
+                  Rs {productData?.price}
+                </Text>
               </View>
               <Text style={styles.gadgettype}>{productData?.name}</Text>
 
@@ -301,7 +311,7 @@ export default ProductScreen = ({route}) => {
           </TouchableOpacity>
         </View>
       ) : (
-      <ContentLoader/>
+        <ContentLoader />
       )}
     </>
   );
@@ -318,7 +328,6 @@ const styles = StyleSheet.create({
   image: {
     width: width,
     height: 413,
-    margin: 1,
   },
   selectBtn: {
     flexDirection: 'row',
@@ -444,5 +453,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: '#fff',
     marginHorizontal: 5,
+  },
+  rate:{
+    fontSize: 18,
+    lineHeight: 20,
+    fontWeight: '500',
+    fontFamily: FontFamily.poppinsRegular,
+    color: Color.colorDarkslategray,
+    lineHeight: 28.8,
   },
 });

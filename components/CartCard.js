@@ -94,7 +94,7 @@ const CartCard = ({
             borderTopLeftRadius: 5,
           }}
         />
-        <View style={{padding: 5, flex: 1}}>
+        <View style={{padding: 8, flex: 1}}>
           <View
             style={{
               flexDirection: 'row',
@@ -108,15 +108,7 @@ const CartCard = ({
               <Icon name="delete-outline" size={20} />
             </Pressable>
           </View>
-          {/* <View style={{flexDirection: 'row'}}>
-            <Text style={styles.sizeColorText}>
-              {' '}
-              Color: <Text style={{color: Color.black}}>{selectedColor}</Text>
-            </Text>
-            <Text style={[styles.sizeColorText, {marginLeft: 10}]}>
-              Size :<Text style={{color: Color.black}}>{selectedSize}</Text>
-            </Text>
-          </View> */}
+
           <View
             style={{
               flexDirection: 'row',
@@ -130,6 +122,7 @@ const CartCard = ({
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'space-evenly',
+                padding: 8,
               }}>
               <Icon
                 name="minus-circle"
@@ -137,6 +130,7 @@ const CartCard = ({
                 onPress={() => {
                   handleDecrease();
                 }}
+                color={Color.colorDarkslategray}
               />
               <Text> {quantityItem} </Text>
               <Icon
@@ -145,11 +139,12 @@ const CartCard = ({
                 onPress={() => {
                   handleIncrease();
                 }}
+                color={Color.colorDarkslategray}
               />
             </View>
-            <View>
+            <View style={{justifyContent: 'flex-end', padding: 8}}>
               <Text
-                style={{textAlign: 'right', width: 130}}>
+                style={{textAlign: 'right', width: 140, color: Color.black}}>
                 Rs {discountedrate} * {quantityItem} =Rs {totalCost}
               </Text>
             </View>
@@ -164,19 +159,20 @@ export default CartCard;
 
 const styles = StyleSheet.create({
   card: {
-    width: '90%',
+    width: '95%',
     height: height / 7,
-    marginHorizontal: 16,
+
     marginVertical: 8,
     borderRadius: 10,
     backgroundColor: '#fff',
-    elevation: 5,
+    elevation: 1,
+    alignSelf: 'center',
   },
   brandText: {
     fontSize: 16,
-    fontWeight: '400',
+    fontWeight: '600',
     color: Color.black,
-    fontFamily: FontFamily.poppinsBold,
+    fontFamily: FontFamily.poppinsRegular,
     width: 180,
   },
   sizeColorText: {

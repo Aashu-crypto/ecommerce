@@ -26,8 +26,8 @@ import Routes from '../../Routes';
 import {updateCart} from '../../redux/slice/CartSlice';
 const CartScreen = () => {
   const data = useSelector(state => state.cart.cart);
-  const latestScreen = useSelector(state => state.screen.screen);
-  console.log('data =>', data);
+
+  console.log('data => cart ', data);
   const user = useSelector(state => state.user.data);
 
   const dispatch = useDispatch();
@@ -81,21 +81,22 @@ const CartScreen = () => {
     if (Object.keys(user).length != 0) {
       dispatch(screen(Routes.CARTSUBMIT));
     } else {
-      Alert.alert(
-        'User should sign in to checkout',
-        'Move to Login ?',
-       [ {
+      Alert.alert('User should sign in to checkout', 'Move to Login ?', [
+        {
           text: 'Cancel',
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
-        {text: 'OK', onPress: () => console.log(dispatch(screen(Routes.SIGNUP)))}],
-      );
+        {
+          text: 'OK',
+          onPress: () => console.log(dispatch(screen(Routes.SIGNUP))),
+        },
+      ]);
     }
   };
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
-      <HeaderComponent title="My Express Cart" icon="shopping-bag" />
+      <HeaderComponent title="Cart" icon="shopping-bag" />
       {data.length != 0 ? (
         <View style={{flex: 1}}>
           {data?.map(i => {
@@ -171,7 +172,7 @@ const CartScreen = () => {
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
           {user.length == 0 ? (
             <Pressable>
-              <Text>Login to see Your Cart</Text>{' '}
+              <Text>Login to see Your Cart</Text>
             </Pressable>
           ) : (
             <Text style={styles.emptyCart}>Cart is empty</Text>

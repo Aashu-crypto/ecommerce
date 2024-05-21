@@ -17,8 +17,9 @@ import AddAddress from '../screens/PaymentScreens/AddAddress';
 import ProductSearchScreen from '../screens/Search/ProductSearchScreen';
 import SearchResult from '../screens/Search/SearchResult';
 import ProductResult from '../screens/HomeScreens/ProductResult';
-
-const Stack = createStackNavigator();
+import EditProfile from '../screens/ProfileScreens/EditProfile';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+const Stack = createNativeStackNavigator();
 
 const HomeStack = () => {
   return (
@@ -28,7 +29,13 @@ const HomeStack = () => {
         component={HomeScreen}
         options={{headerShown: false}}
       />
-      <Stack.Screen name={Routes.PRODUCT} component={ProductScreen} />
+      <Stack.Screen
+        name={Routes.PRODUCT}
+        component={ProductScreen}
+        options={{
+          animation: 'slide_from_right',
+        }}
+      />
       <Stack.Screen
         name="Cart"
         component={CartScreen}
@@ -44,8 +51,16 @@ const HomeStack = () => {
         component={ProductSearchScreen}
         options={{headerShown: false}}
       />
-      <Stack.Screen name={Routes.PRODUCTRESULT} component={ProductResult}  options={{headerShown: false}} />
-      <Stack.Screen name={Routes.SEARCHRESULT} component={SearchResult}  options={{headerShown: false}} />
+      <Stack.Screen
+        name={Routes.PRODUCTRESULT}
+        component={ProductResult}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name={Routes.SEARCHRESULT}
+        component={SearchResult}
+        options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
 };
@@ -88,6 +103,7 @@ const ProfileStack = () => {
           },
         }}
       />
+      <Stack.Screen name={Routes.EDITPROFILE} component={EditProfile} />
     </Stack.Navigator>
   );
 };
@@ -109,7 +125,7 @@ const UserProfileStack = () => {
         options={{
           screenOptions: true,
           title: '',
-          headerShown:false
+          headerShown: false,
         }}
       />
     </Stack.Navigator>

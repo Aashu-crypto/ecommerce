@@ -34,7 +34,9 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: Color.black,
 
-    fontFamily: FontFamily.poppinsBold,
     textAlign: 'center',
+    fontFamily: FontFamily.poppinsRegular,
+    fontWeight:'400',
+    letterSpacing:2
   },
 });

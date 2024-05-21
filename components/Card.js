@@ -23,11 +23,11 @@ const Card = ({
       onPress={() => {
         navigation.navigate(Routes.PRODUCT, {
           productId: productId,
-          title:gadgettype
+          title: gadgettype,
         });
       }}>
       <Image source={{uri: imageurl}} style={styles.image} />
-      <View style={{width: 50}}>
+      <View style={{width: 50,}}>
         <StarRating
           starSize={15}
           disabled={false}
@@ -41,10 +41,8 @@ const Card = ({
       <Text style={styles.brandname}>{brandname}</Text>
 
       <Text style={styles.gadgettype}>{gadgettype}</Text>
-      <View style={{flexDirection: 'row'}}>
-        <Text style={styles.rate}>{rate}</Text>
-        <Text style={styles.discountedrate}> Rs {discountedrate}</Text>
-      </View>
+
+      <Text style={styles.discountedrate}>Rs {discountedrate}</Text>
     </TouchableOpacity>
   );
 };
@@ -59,10 +57,11 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 5,
     justifyContent: 'space-evenly',
+    gap: 5,
   },
   image: {
     width: 170,
-    height: 180,
+    height: 200,
     resizeMode: 'stretch',
     alignSelf: 'center',
     marginVertical: 5,
@@ -91,9 +90,8 @@ const styles = StyleSheet.create({
   discountedrate: {
     fontSize: 14,
     lineHeight: 20,
-    fontWeight: '500',
+    fontWeight: '700',
     fontFamily: FontFamily.poppinsRegular,
-    color: '#DB3022',
-    marginLeft: 7,
+    color: Color.colorDarkslategray,
   },
 });

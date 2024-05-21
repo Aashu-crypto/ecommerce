@@ -1,1 +1,1 @@
-export const backendHost = 'https://backendecommerce-5sjj.onrender.com/api/v1';
+export const backendHost = 'http://192.168.29.45:3002/api/v1';

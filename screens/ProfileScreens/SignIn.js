@@ -12,7 +12,7 @@ import {Color, FontFamily} from '../../GlobalStyles';
 import {useDispatch} from 'react-redux';
 import SignInput from '../../components/SignInput';
 import auth from '@react-native-firebase/auth';
-import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import LoginSvg from '../../assets/img/loginSvg.svg';
 import {useNavigation} from '@react-navigation/native';
 import {screen} from '../../redux/slice/ScreenNameSlice';

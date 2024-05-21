@@ -7,10 +7,10 @@ import {
   Alert,
   ScrollView,
   Animated,
+  Pressable
 } from 'react-native';
 import React, {useRef, useState} from 'react';
 import {Color, FontFamily} from '../../GlobalStyles';
-import UserAvatar from 'react-native-user-avatar';
 import ProfileOptions from '../../components/ProfileOptions';
 import {useSelector} from 'react-redux';
 import {setUser} from '../../redux/slice/UserSlice';
@@ -18,77 +18,47 @@ import {screen} from '../../redux/slice/ScreenNameSlice';
 import {useDispatch} from 'react-redux';
 import {width} from '../../GlobalStyles';
 import MaleAvater from '../../assets/img/maleAvatar.svg';
-import Svg, {Circle, Polygon, Path, G} from 'react-native-svg';
 import HeaderComponent from '../../components/HeaderComponent';
 import {updateCart} from '../../redux/slice/CartSlice';
 import Routes from '../../Routes';
+import {User} from '../../components/UserPic';
 const headerHeight = 280;
-const headerFinalHeight = 70;
-const imageSize = (headerHeight / 3) * 2;
-const mySvg = ({}) => {};
+
 const ProfileScreen = ({navigation}) => {
   const user = useSelector(state => state.user.data);
 
   console.log('user', user);
-  const [textWidth, setTextWidth] = useState(0);
-  const scrollY = useRef(new Animated.Value(0)).current;
-  const offset = headerHeight - headerFinalHeight;
-  const translateImageY = scrollY.interpolate({
-    inputRange: [0, offset],
-    outputRange: [0, -(headerFinalHeight - headerHeight) / 2],
-    extrapolate: 'clamp',
-  });
-  const translateImageX = scrollY.interpolate({
-    inputRange: [0, offset],
-    outputRange: [
-      0,
-      -(width / 2) + (imageSize * headerFinalHeight) / headerHeight,
-    ],
-    extrapolate: 'clamp',
-  });
-  const translateHeader = scrollY.interpolate({
-    inputRange: [0, offset],
-    outputRange: [0, -offset],
-    extrapolate: 'clamp',
-  });
-  const scaleImage = scrollY.interpolate({
-    inputRange: [0, offset],
-    outputRange: [1, headerFinalHeight / headerHeight],
-    extrapolate: 'clamp',
-  });
-  const translateName = scrollY.interpolate({
-    inputRange: [0, offset / 2, offset],
-    outputRange: [0, 10, -width / 2 + textWidth / 2 + headerFinalHeight],
-    extrapolate: 'clamp',
-  });
-  const scaleName = scrollY.interpolate({
-    inputRange: [0, offset],
-    outputRange: [1, 0.8],
-    extrapolate: 'clamp',
-  });
+  if(Object.keys(user).length == 0){
+    dispatch(screen(Routes.SIGNUP))
+  }
 
   const dispatch = useDispatch();
   const handleLogOut = () => {
     dispatch(updateCart([]));
     dispatch(setUser({}));
-    
   };
   const profileOptionsData = [
+    {
+      title: 'Edit Profile',
+      subTitle: 'Change name / Password',
+      route: Routes.EDITPROFILE,
+      icon: 'user-o',
+    },
     {
       title: 'My orders',
       subTitle: 'Already have 12 orders',
       route: Routes.MYORDERS,
+      icon: 'shopping-cart',
     },
-    {title: 'Shipping Address', subTitle: '2 Addresses'},
+    {title: 'Shipping Address', subTitle: '2 Addresses', icon: 'address-book'},
     {title: 'Payment Method', subTitle: 'visa **32'},
-    {title: 'Promo Code', subTitle: 'You have special PromoCode'},
-    {title: 'My review', subTitle: 'Review for 4 items'},
+
     {title: 'Setting', subTitle: 'Notification, passwords'},
   ];
   return (
     <SafeAreaView style={styles.container}>
-      <HeaderComponent title="My Profile" icon="user" />
-      <Animated.View
+      <HeaderComponent title="Profile" icon="user" />
+      {/* <Animated.View
         pointerEvents="none"
         style={[styles.header, {transform: [{translateY: translateHeader}]}]}>
         <Animated.View
@@ -112,16 +82,46 @@ const ProfileScreen = ({navigation}) => {
           ]}>
           {user.name}
         </Animated.Text>
-      </Animated.View>
+      </Animated.View> */}
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'row',
+          gap: 10,
+          marginTop:10
+        }}>
+        <User />
+        <Pressable
+          style={{
+            backgroundColor: Color.lightpurple,
+            borderRadius: 15,
+            borderColor: Color.appDefaultColor,
+            color: Color.colorDarkslategray,
+            borderWidth: 1,
+            padding: 15,
+          }}
+          onPress={() => {
+            dispatch(screen(Routes.SIGNUP));
+          }}>
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: '400',
+              width: width / 1.8,
+              textAlign: 'center',
+              fontFamily: FontFamily.poppinsRegular,
+              textDecorationLine: 'underline',
+            }}>
+            Sign In/Create Account
+          </Text>
+        </Pressable>
+      </View>
 
       <ScrollView
         style={{marginHorizontal: 10}}
         contentContainerStyle={styles.scrollContainer}
-        showsVerticalScrollIndicator={false}
-        onScroll={Animated.event(
-          [{nativeEvent: {contentOffset: {y: scrollY}}}],
-          {useNativeDriver: false},
-        )}>
+        showsVerticalScrollIndicator={false}>
         <View>
           {profileOptionsData.map((option, index) => (
             <TouchableOpacity
@@ -130,7 +130,11 @@ const ProfileScreen = ({navigation}) => {
                 console.log(option.route);
                 navigation.navigate(option.route);
               }}>
-              <ProfileOptions title={option.title} subTitle={option.subTitle} />
+              <ProfileOptions
+                title={option.title}
+                subTitle={option.subTitle}
+                name={option.icon}
+              />
             </TouchableOpacity>
           ))}
         </View>
@@ -155,6 +159,7 @@ const ProfileScreen = ({navigation}) => {
           <ProfileOptions
             title="Login In/Logout"
             subTitle=" Sign Up /Login In / Register"
+            name="sign-in"
           />
         </TouchableOpacity>
       </ScrollView>
@@ -168,7 +173,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-
   },
   name: {
     fontSize: 18,
@@ -176,6 +180,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: Color.black,
     fontFamily: FontFamily.poppinsRegular,
+    marginTop: 10,
   },
   email: {
     fontSize: 14,
@@ -186,7 +191,6 @@ const styles = StyleSheet.create({
   },
 
   header: {
-    height: headerHeight,
     marginTop: 60,
     position: 'absolute',
     width: '100%',
@@ -194,29 +198,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     zIndex: 100,
     backgroundColor: '#fff',
-  },
-  scrollContainer: {
-    paddingTop: headerHeight + 5,
-  },
-  image: {
-    height: imageSize,
-    width: imageSize,
-    borderRadius: headerHeight,
-
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  img: {
-    height: '100%',
-    width: '100%',
-  },
-  name: {
-    fontSize: 30,
-    color: '#000',
-    position: 'absolute',
-    bottom: 0,
-    height: headerFinalHeight,
-    textAlignVertical: 'center',
-    letterSpacing: 2,
   },
 });

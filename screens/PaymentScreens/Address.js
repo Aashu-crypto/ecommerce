@@ -176,7 +176,11 @@ const Address = () => {
           onPress={() => {
             dispatch(screen(Routes.MAIN));
           }}>
-          <Text style={styles.backText}>Back to Cart </Text>
+          <View style={{flexDirection: 'row'}}>
+            <View style={{borderBottomWidth: 1, flex: 1}}></View>
+            <Text style={styles.backText}>Back to Cart </Text>
+            <View style={{borderBottomWidth: 1, flex: 1}}></View>
+          </View>
         </Pressable>
       </View>
     </>

@@ -46,7 +46,7 @@ export default function BottomTabNavigation() {
             <View style={styles.icon}>
               <Icon
                 name="home"
-                color={focused && Color.appDefaultColor}
+                color={focused?Color.appDefaultColor:Color.colorDarkgray}
                 size={30}
               />
             </View>
@@ -55,7 +55,8 @@ export default function BottomTabNavigation() {
 
           tabBarActiveTintColor: Color.appDefaultColor,
           tabBarLabel: 'Home',
-          tabBarActiveBackgroundColor: Color.lightestAppColor,
+          
+          tabBarActiveBackgroundColor: Color.lightpurple,
         }}
       />
       <Tab.Screen
@@ -66,7 +67,7 @@ export default function BottomTabNavigation() {
             <View style={styles.icon}>
               <Icon
                 name="shopping-cart"
-                color={focused && Color.appDefaultColor}
+                color={focused?Color.appDefaultColor:Color.colorDarkgray}
                 size={26}
               />
             </View>
@@ -85,7 +86,7 @@ export default function BottomTabNavigation() {
             <View style={styles.icon}>
               <Icon
                 name="user-circle-o"
-                color={focused && Color.appDefaultColor}
+                color={focused?Color.appDefaultColor:Color.colorDarkgray}
                 size={26}
               />
             </View>
